@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problems — Intrigue8</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f7f6f4; --surface: #ffffff;
+            --text-1: #161616; --text-2: #64748b; --text-3: #94a3b8;
+            --accent: #0d9488; --accent-dim: rgba(13,148,136,0.08);
+            --accent-glow: rgba(13,148,136,0.2); --accent-dark: #0b7a70;
+            --border: rgba(0,0,0,0.07);
+            --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px; --s8:128px;
+        }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text-1); line-height:1.6; overflow-x:hidden; }
+        .wrap { max-width:1080px; margin:0 auto; padding:0 var(--s4); }
+
+        header { position:sticky; top:0; z-index:100; background:rgba(247,246,244,0.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
+        .header-circuit { display:block; width:100%; height:36px; }
+        .footer-circuit { display:block; width:100%; height:44px; }
+        header .wrap { display:flex; justify-content:space-between; align-items:center; padding-top:20px; padding-bottom:20px; }
+        .logo { font-family:'Plus Jakarta Sans',sans-serif; font-size:18px; font-weight:800; letter-spacing:1px; color:var(--text-1); text-decoration:none; }
+        nav { display:flex; gap:var(--s4); }
+        nav a { font-size:14px; font-weight:500; color:var(--text-2); text-decoration:none; transition:color 0.2s; }
+        nav a:hover { color:var(--accent); }
+        nav .nav-cta { color:var(--accent); border:1.5px solid var(--accent); padding:5px 14px; border-radius:6px; font-size:13px; transition:background 0.2s, color 0.2s; }
+        nav .nav-cta:hover { background:var(--accent); color:#fff; }
+
+        .page-hero { padding: var(--s7) 0 var(--s6); background:var(--bg); border-bottom: 1px solid var(--border); }
+        .page-hero h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(32px,4.5vw,56px); font-weight:800; letter-spacing:-2px; color:var(--text-1); margin-bottom:var(--s2); line-height:1.08; }
+        .page-hero p { font-size:17px; color:var(--text-2); max-width:560px; line-height:1.7; }
+
+        .section-label { display:flex; align-items:center; gap:10px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--accent); margin-bottom:var(--s2); }
+        .section-label::before { content:''; display:inline-block; width:24px; height:2px; background:var(--accent); border-radius:1px; box-shadow:0 0 6px var(--accent-glow); }
+        .section-label::after { content:''; display:inline-block; width:6px; height:6px; border:1.5px solid var(--accent); border-radius:50%; box-shadow:0 0 6px var(--accent-glow); }
+
+        .section-h { font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(28px,3.5vw,44px); font-weight:700; line-height:1.12; letter-spacing:-1.2px; color:var(--text-1); margin-bottom:var(--s2); }
+        .section-h-rule { display:flex; align-items:center; gap:8px; margin-bottom:var(--s2); margin-top:4px; }
+        .section-h-rule span:first-child { display:block; width:48px; height:2px; background:var(--accent); border-radius:1px; }
+        .section-h-rule span:nth-child(2) { display:block; width:6px; height:6px; background:var(--accent); border-radius:50%; box-shadow:0 0 8px var(--accent); }
+        .section-h-rule span:nth-child(3) { display:block; width:20px; height:2px; background:linear-gradient(90deg,var(--accent),transparent); border-radius:1px; }
+        .section-sub { font-size:16px; color:var(--text-2); line-height:1.7; max-width:580px; margin-bottom:var(--s5); }
+
+        .btn-primary { display:inline-block; padding:13px 26px; background:var(--accent); color:#fff; font-size:14px; font-weight:600; border-radius:8px; text-decoration:none; border:2px solid var(--accent); box-shadow:0 4px 16px var(--accent-glow); transition:all 0.2s; }
+        .btn-primary:hover { background:var(--accent-dark); border-color:var(--accent-dark); transform:translateY(-1px); box-shadow:0 8px 24px rgba(13,148,136,0.3); }
+        .btn-ghost { display:inline-block; padding:13px 26px; background:transparent; color:var(--text-2); font-size:14px; font-weight:500; border-radius:8px; text-decoration:none; border:2px solid var(--border); transition:all 0.2s; }
+        .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+
+        .card { padding:var(--s4); border:1px solid rgba(13,148,136,0.28); border-radius:12px; background:var(--surface); transition:all 0.25s; position:relative; overflow:hidden; }
+        .card > * { position:relative; z-index:1; }
+        .card:hover { border-color:rgba(13,148,136,0.55); box-shadow:0 0 0 3px var(--accent-dim),0 6px 24px rgba(13,148,136,0.12); transform:translateY(-2px); }
+        .card-circuit { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+
+        .card-n { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-3); margin-bottom:var(--s2); }
+        .card h3 { font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:var(--text-1); margin-bottom:var(--s1); }
+        .card p { font-size:14px; color:var(--text-2); line-height:1.65; }
+
+        .divider { display:block; width:100%; height:80px; background:none; }
+
+        .cta-band { padding:var(--s8) 0; background:var(--text-1); text-align:center; position:relative; overflow:hidden; }
+        .cta-band h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(28px,4vw,48px); font-weight:800; letter-spacing:-1.5px; color:#fff; margin-bottom:var(--s2); }
+        .cta-band p { font-size:16px; color:rgba(255,255,255,0.5); line-height:1.7; margin-bottom:var(--s5); max-width:440px; margin-left:auto; margin-right:auto; }
+        .btn-cta { display:inline-block; padding:15px 36px; background:var(--accent); color:#fff; font-size:15px; font-weight:600; border-radius:8px; text-decoration:none; box-shadow:0 0 32px rgba(13,148,136,0.4); transition:all 0.2s; }
+        .btn-cta:hover { background:var(--accent-dark); box-shadow:0 0 56px rgba(13,148,136,0.55); transform:translateY(-2px); }
+
+        footer { padding:0 0 var(--s4); background:var(--bg); }
+        footer .wrap { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s2); }
+        footer p { font-size:13px; color:var(--text-3); }
+
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+        @keyframes flow-dash { from{stroke-dashoffset:500} to{stroke-dashoffset:0} }
+        @keyframes node-pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+        @keyframes card-dash { 0%{stroke-dashoffset:200} 100%{stroke-dashoffset:0} }
+        .fl   { animation:flow-dash 6s linear infinite; }
+        .fl-2 { animation:flow-dash 6s linear infinite; animation-delay:-2s; }
+        .fl-3 { animation:flow-dash 6s linear infinite; animation-delay:-4s; }
+        .nd   { animation:node-pulse 2.5s ease-in-out infinite; }
+        .nd-2 { animation:node-pulse 2.5s ease-in-out infinite; animation-delay:-0.8s; }
+        .nd-3 { animation:node-pulse 2.5s ease-in-out infinite; animation-delay:-1.7s; }
+        .cf   { animation:card-dash 4s linear infinite; }
+        .cf-2 { animation:card-dash 4s linear infinite; animation-delay:-1.3s; }
+        .cf-3 { animation:card-dash 4s linear infinite; animation-delay:-2.6s; }
+
+        @media(max-width:768px){ nav{gap:var(--s3);} .page-hero{padding:var(--s6) 0 var(--s5);} }
+        @media(max-width:600px){ nav a:not(.nav-cta){display:none;} nav{gap:0;} }
+        @media(max-width:480px){ .btn-primary,.btn-ghost{display:block;text-align:center;} }
+
+        .problem-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:var(--s3); }
+        .content-section { padding:var(--s7) 0; background:var(--surface); }
+        .content-section.alt { background:var(--bg); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="wrap">
+        <a href="index.html" class="logo">INTRIGUE8</a>
+        <nav>
+            <a href="problems.html">Problems</a>
+            <a href="solution.html">Solution</a>
+            <a href="contact.html">Contact</a>
+            <a href="survey.html" class="nav-cta">Take Survey</a>
+        </nav>
+    </div>
+    <svg class="header-circuit" viewBox="0 0 1080 36" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <line x1="0" y1="1" x2="1080" y2="1" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="0" y1="18" x2="1080" y2="18" stroke="#0d9488" stroke-width="1.5" opacity="0.32"/>
+        <line x1="0" y1="8" x2="340" y2="8" stroke="#0d9488" stroke-width="0.8" opacity="0.16"/>
+        <line x1="740" y1="8" x2="1080" y2="8" stroke="#0d9488" stroke-width="0.8" opacity="0.16"/>
+        <line x1="0" y1="28" x2="300" y2="28" stroke="#0369a1" stroke-width="0.8" opacity="0.13"/>
+        <line x1="780" y1="28" x2="1080" y2="28" stroke="#0369a1" stroke-width="0.8" opacity="0.13"/>
+        <line x1="80" y1="8" x2="80" y2="28" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <circle cx="80" cy="18" r="2.5" fill="#0d9488" opacity="0.45"/>
+        <line x1="340" y1="8" x2="340" y2="18" stroke="#0d9488" stroke-width="1" opacity="0.18"/>
+        <circle cx="340" cy="8" r="2" fill="#0d9488" opacity="0.3"/>
+        <rect x="504" y="12" width="72" height="12" rx="2" fill="none" stroke="#0d9488" stroke-width="1.2" opacity="0.42"/>
+        <circle cx="504" cy="18" r="3" fill="#0d9488" opacity="0.5" class="nd"/>
+        <circle cx="576" cy="18" r="3" fill="#0d9488" opacity="0.5" class="nd-2"/>
+        <line x1="468" y1="18" x2="504" y2="18" stroke="#0d9488" stroke-width="1.2" opacity="0.35"/>
+        <line x1="576" y1="18" x2="612" y2="18" stroke="#0d9488" stroke-width="1.2" opacity="0.35"/>
+        <text x="540" y="21" font-family="monospace" font-size="6" fill="#0d9488" text-anchor="middle" opacity="0.5">I8·SYS</text>
+        <line x1="740" y1="8" x2="740" y2="18" stroke="#0d9488" stroke-width="1" opacity="0.18"/>
+        <circle cx="740" cy="8" r="2" fill="#0d9488" opacity="0.3"/>
+        <line x1="1000" y1="8" x2="1000" y2="28" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <circle cx="1000" cy="18" r="2.5" fill="#0d9488" opacity="0.45"/>
+        <line x1="160" y1="15" x2="160" y2="21" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <line x1="240" y1="15.5" x2="240" y2="20.5" stroke="#0d9488" stroke-width="0.8" opacity="0.16"/>
+        <line x1="840" y1="15" x2="840" y2="21" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <line x1="920" y1="15.5" x2="920" y2="20.5" stroke="#0d9488" stroke-width="0.8" opacity="0.16"/>
+        <rect x="3" y="5" width="7" height="7" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.25"/>
+        <rect x="1070" y="5" width="7" height="7" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.25"/>
+        <line x1="0" y1="18" x2="1080" y2="18" stroke="#0d9488" stroke-width="1.5" opacity="0.28" stroke-dasharray="80 1000" class="fl"/>
+    </svg>
+</header>
+
+<section class="page-hero">
+    <div class="wrap">
+        <p class="section-label">The problems</p>
+        <h1>Six things stealing<br>your <span style="color:var(--accent)">time and profit.</span></h1>
+        <p>For rural Irish SMEs — contractors, service providers, small teams — admin overhead is a hidden profit killer.</p>
+    </div>
+</section>
+
+<svg class="divider" viewBox="0 0 1080 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <line x1="0" y1="40" x2="1080" y2="40" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="0" y1="40" x2="220" y2="40" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+    <line x1="860" y1="40" x2="1080" y2="40" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+    <line x1="160" y1="22" x2="450" y2="22" stroke="#0d9488" stroke-width="0.9" opacity="0.18"/>
+    <line x1="630" y1="22" x2="920" y2="22" stroke="#0d9488" stroke-width="0.9" opacity="0.18"/>
+    <line x1="420" y1="40" x2="492" y2="40" stroke="#0d9488" stroke-width="1.5" opacity="0.42"/>
+    <line x1="588" y1="40" x2="660" y2="40" stroke="#0d9488" stroke-width="1.5" opacity="0.42"/>
+    <circle cx="540" cy="40" r="8" fill="none" stroke="#0d9488" stroke-width="2" opacity="0.55" class="nd"/>
+    <circle cx="540" cy="40" r="3" fill="#0d9488" opacity="0.7"/>
+    <circle cx="540" cy="40" r="14" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.16" class="nd-2"/>
+    <path d="M 540,32 L 540,22 L 562,22 L 572,12" stroke="#0d9488" stroke-width="1.2" fill="none" opacity="0.32"/>
+    <circle cx="572" cy="12" r="3" fill="#0d9488" opacity="0.42" class="nd"/>
+    <path d="M 540,48 L 540,58 L 518,58 L 508,68" stroke="#0d9488" stroke-width="1.2" fill="none" opacity="0.32"/>
+    <circle cx="508" cy="68" r="3" fill="#0d9488" opacity="0.42" class="nd-3"/>
+    <circle cx="270" cy="40" r="5" fill="none" stroke="#0d9488" stroke-width="1.4" opacity="0.34"/>
+    <circle cx="270" cy="40" r="2" fill="#0d9488" opacity="0.42"/>
+    <line x1="228" y1="40" x2="250" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="290" y1="40" x2="315" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <circle cx="810" cy="40" r="5" fill="none" stroke="#0d9488" stroke-width="1.4" opacity="0.34"/>
+    <circle cx="810" cy="40" r="2" fill="#0d9488" opacity="0.42"/>
+    <line x1="765" y1="40" x2="790" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="830" y1="40" x2="852" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="135" y1="36" x2="135" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="135" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="405" y1="36" x2="405" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="405" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="675" y1="36" x2="675" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="675" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="945" y1="36" x2="945" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="945" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="0" y1="40" x2="1080" y2="40" stroke="#0d9488" stroke-width="2" opacity="0.22" stroke-dasharray="100 980" class="fl"/>
+</svg>
+
+<section class="content-section">
+    <div class="wrap">
+        <p class="section-label">What we solve</p>
+        <h2 class="section-h">The six problems holding you back.</h2>
+        <div class="section-h-rule"><span></span><span></span><span></span></div>
+        <div class="problem-grid">
+
+            <div class="card">
+                <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                    <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                    <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf" opacity="0.55"/>
+                    <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf-2" opacity="0.42"/>
+                    <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf-3" opacity="0.35"/>
+                    <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                    <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                </svg>
+                <p class="card-n">01</p>
+                <h3>Admin work steals your earning hours</h3>
+                <p>You're spending too much time on invoicing, tracking jobs, and chasing paperwork instead of doing the work itself. Those are billable hours lost every week.</p>
+            </div>
+
+            <div class="card">
+                <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                    <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                    <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf-2" opacity="0.55"/>
+                    <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf-3" opacity="0.42"/>
+                    <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf" opacity="0.35"/>
+                    <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                    <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                </svg>
+                <p class="card-n">02</p>
+                <h3>Your data is scattered everywhere</h3>
+                <p>Job notes in WhatsApp, invoices in email, costs scribbled in notebooks. You can't quickly find anything when you need it.</p>
+            </div>
+
+            <div class="card">
+                <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                    <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                    <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf-3" opacity="0.55"/>
+                    <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf" opacity="0.42"/>
+                    <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf-2" opacity="0.35"/>
+                    <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                    <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                </svg>
+                <p class="card-n">03</p>
+                <h3>You can't see if you're profitable</h3>
+                <p>Which jobs actually made money? Without visibility, you're guessing. That's dangerous for a small business with tight margins.</p>
+            </div>
+
+            <div class="card">
+                <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                    <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                    <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf" opacity="0.55"/>
+                    <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf-2" opacity="0.42"/>
+                    <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf-3" opacity="0.35"/>
+                    <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                    <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                </svg>
+                <p class="card-n">04</p>
+                <h3>No way to plan or improve</h3>
+                <p>You don't know your seasonal patterns, cost trends, or which services are most profitable. Every month feels like starting from scratch.</p>
+            </div>
+
+            <div class="card">
+                <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                    <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                    <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf-2" opacity="0.55"/>
+                    <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf-3" opacity="0.42"/>
+                    <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf" opacity="0.35"/>
+                    <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                    <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                </svg>
+                <p class="card-n">05</p>
+                <h3>Everything requires manual work</h3>
+                <p>Job notes → docket → invoice → client records. Each step is manual typing and copying. Errors slip through. Time gets wasted.</p>
+            </div>
+
+            <div class="card">
+                <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                    <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                    <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf-3" opacity="0.55"/>
+                    <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf" opacity="0.42"/>
+                    <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf-2" opacity="0.35"/>
+                    <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                    <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                </svg>
+                <p class="card-n">06</p>
+                <h3>You're burnt out managing chaos</h3>
+                <p>You got into your trade because you're good at it. Now too much of your day goes to admin instead of the work you love.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<svg class="divider" viewBox="0 0 1080 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <line x1="0" y1="40" x2="1080" y2="40" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="0" y1="40" x2="220" y2="40" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+    <line x1="860" y1="40" x2="1080" y2="40" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+    <line x1="160" y1="22" x2="450" y2="22" stroke="#0d9488" stroke-width="0.9" opacity="0.18"/>
+    <line x1="630" y1="22" x2="920" y2="22" stroke="#0d9488" stroke-width="0.9" opacity="0.18"/>
+    <line x1="420" y1="40" x2="492" y2="40" stroke="#0d9488" stroke-width="1.5" opacity="0.42"/>
+    <line x1="588" y1="40" x2="660" y2="40" stroke="#0d9488" stroke-width="1.5" opacity="0.42"/>
+    <circle cx="540" cy="40" r="8" fill="none" stroke="#0d9488" stroke-width="2" opacity="0.55" class="nd"/>
+    <circle cx="540" cy="40" r="3" fill="#0d9488" opacity="0.7"/>
+    <circle cx="540" cy="40" r="14" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.16" class="nd-2"/>
+    <path d="M 540,32 L 540,22 L 562,22 L 572,12" stroke="#0d9488" stroke-width="1.2" fill="none" opacity="0.32"/>
+    <circle cx="572" cy="12" r="3" fill="#0d9488" opacity="0.42" class="nd"/>
+    <path d="M 540,48 L 540,58 L 518,58 L 508,68" stroke="#0d9488" stroke-width="1.2" fill="none" opacity="0.32"/>
+    <circle cx="508" cy="68" r="3" fill="#0d9488" opacity="0.42" class="nd-3"/>
+    <circle cx="270" cy="40" r="5" fill="none" stroke="#0d9488" stroke-width="1.4" opacity="0.34"/>
+    <circle cx="270" cy="40" r="2" fill="#0d9488" opacity="0.42"/>
+    <line x1="228" y1="40" x2="250" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="290" y1="40" x2="315" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <circle cx="810" cy="40" r="5" fill="none" stroke="#0d9488" stroke-width="1.4" opacity="0.34"/>
+    <circle cx="810" cy="40" r="2" fill="#0d9488" opacity="0.42"/>
+    <line x1="765" y1="40" x2="790" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="830" y1="40" x2="852" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="135" y1="36" x2="135" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="135" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="405" y1="36" x2="405" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="405" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="675" y1="36" x2="675" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="675" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="945" y1="36" x2="945" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="945" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="0" y1="40" x2="1080" y2="40" stroke="#0d9488" stroke-width="2" opacity="0.22" stroke-dasharray="100 980" class="fl"/>
+</svg>
+
+<section class="cta-band">
+    <div class="wrap">
+        <h2>We build systems that fix this.</h2>
+        <p>Agentic tools that replace manual admin with automated workflows.</p>
+        <a href="solution.html" class="btn-cta">See the solution →</a>
+    </div>
+</section>
+
+<footer>
+    <svg class="footer-circuit" viewBox="0 0 1080 44" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <line x1="0" y1="2" x2="1080" y2="2" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="0" y1="20" x2="1080" y2="20" stroke="#0d9488" stroke-width="1.5" opacity="0.28"/>
+        <line x1="0" y1="10" x2="380" y2="10" stroke="#0d9488" stroke-width="0.8" opacity="0.15"/>
+        <line x1="700" y1="10" x2="1080" y2="10" stroke="#0d9488" stroke-width="0.8" opacity="0.15"/>
+        <line x1="0" y1="32" x2="350" y2="32" stroke="#0369a1" stroke-width="0.8" opacity="0.12"/>
+        <line x1="730" y1="32" x2="1080" y2="32" stroke="#0369a1" stroke-width="0.8" opacity="0.12"/>
+        <line x1="100" y1="10" x2="100" y2="32" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <circle cx="100" cy="20" r="2.5" fill="#0d9488" opacity="0.38"/>
+        <line x1="380" y1="10" x2="380" y2="20" stroke="#0d9488" stroke-width="1" opacity="0.18"/>
+        <circle cx="380" cy="10" r="2" fill="#0d9488" opacity="0.28"/>
+        <circle cx="540" cy="20" r="6" fill="none" stroke="#0d9488" stroke-width="1.8" opacity="0.48" class="nd"/>
+        <circle cx="540" cy="20" r="2.5" fill="#0d9488" opacity="0.58"/>
+        <line x1="496" y1="20" x2="520" y2="20" stroke="#0d9488" stroke-width="1.2" opacity="0.38"/>
+        <line x1="560" y1="20" x2="584" y2="20" stroke="#0d9488" stroke-width="1.2" opacity="0.38"/>
+        <path d="M 540,26 L 540,36 L 556,36 L 564,42" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.25"/>
+        <circle cx="556" cy="36" r="2" fill="#0d9488" opacity="0.3"/>
+        <circle cx="270" cy="20" r="3.5" fill="none" stroke="#0d9488" stroke-width="1.2" opacity="0.28"/>
+        <circle cx="270" cy="20" r="1.5" fill="#0d9488" opacity="0.36"/>
+        <circle cx="810" cy="20" r="3.5" fill="none" stroke="#0d9488" stroke-width="1.2" opacity="0.28"/>
+        <circle cx="810" cy="20" r="1.5" fill="#0d9488" opacity="0.36"/>
+        <line x1="700" y1="10" x2="700" y2="20" stroke="#0d9488" stroke-width="1" opacity="0.18"/>
+        <circle cx="700" cy="10" r="2" fill="#0d9488" opacity="0.28"/>
+        <line x1="980" y1="10" x2="980" y2="32" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <circle cx="980" cy="20" r="2.5" fill="#0d9488" opacity="0.38"/>
+        <line x1="180" y1="17" x2="180" y2="23" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <line x1="450" y1="17" x2="450" y2="23" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <line x1="630" y1="17" x2="630" y2="23" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <line x1="900" y1="17" x2="900" y2="23" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <rect x="3" y="28" width="6" height="6" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <rect x="1071" y="28" width="6" height="6" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <line x1="0" y1="20" x2="1080" y2="20" stroke="#0d9488" stroke-width="1.5" opacity="0.22" stroke-dasharray="80 1000" class="fl-3"/>
+    </svg>
+    <div class="wrap">
+        <p>&copy; 2026 Intrigue8</p>
+        <p>Systems for Irish service businesses.</p>
+    </div>
+</footer>
+
+</body>
+</html>

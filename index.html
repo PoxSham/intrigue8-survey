@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intrigue8 — Systems for Irish SMEs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ── TOKENS ─────────────────────────────────── */
+        :root {
+            --bg:           #f7f6f4;
+            --surface:      #ffffff;
+            --text-1:       #161616;
+            --text-2:       #64748b;
+            --text-3:       #94a3b8;
+            --accent:       #0d9488;
+            --accent-dim:   rgba(13,148,136,0.08);
+            --accent-glow:  rgba(13,148,136,0.2);
+            --accent-dark:  #0b7a70;
+            --border:       rgba(0,0,0,0.07);
+
+            --s1: 8px;   --s2: 16px;  --s3: 24px;
+            --s4: 32px;  --s5: 48px;  --s6: 64px;
+            --s7: 96px;  --s8: 128px;
+        }
+
+        /* ── RESET ──────────────────────────────────── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-1);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── LAYOUT ─────────────────────────────────── */
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 var(--s4);
+        }
+
+        /* ── HEADER ─────────────────────────────────── */
+        header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(247,246,244,0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .header-circuit { display: block; width: 100%; height: 36px; }
+        .footer-circuit { display: block; width: 100%; height: 44px; }
+        header .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        .logo {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px; font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--text-1);
+            text-decoration: none;
+        }
+        nav { display: flex; gap: var(--s4); }
+        nav a {
+            font-size: 14px; font-weight: 500;
+            color: var(--text-2); text-decoration: none;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: var(--accent); }
+        nav .nav-cta { color: var(--accent); border: 1.5px solid var(--accent); padding: 5px 14px; border-radius: 6px; font-size: 13px; transition: background 0.2s, color 0.2s; }
+        nav .nav-cta:hover { background: var(--accent); color: #fff; }
+
+        /* ── HERO ───────────────────────────────────── */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: var(--s4) 0 var(--s5);
+            display: flex;
+            align-items: flex-start;
+        }
+        /* Gradient veil so text always reads clean over the graphic */
+        .hero::before {
+            content: '';
+            position: absolute; top: 0; left: 0; bottom: 0;
+            width: 62%;
+            background: linear-gradient(to right, var(--bg) 62%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative; z-index: 2;
+            max-width: 560px;
+        }
+
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: var(--s1);
+            font-size: 11px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: var(--s3);
+            padding: 6px 12px;
+            border: 1px solid var(--accent-glow);
+            border-radius: 4px;
+            background: var(--accent-dim);
+        }
+        .eyebrow::before {
+            content: '';
+            width: 5px; height: 5px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blink 2.4s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(40px, 5.5vw, 66px);
+            font-weight: 800;
+            line-height: 1.06;
+            letter-spacing: -2.5px;
+            color: var(--text-1);
+            margin-bottom: var(--s3);
+        }
+        .hero h1 .hi { color: var(--accent); }
+
+        .hero-sub {
+            font-size: 17px;
+            color: var(--text-1);
+            line-height: 1.75;
+            margin-bottom: var(--s5);
+            max-width: 440px;
+        }
+
+        .cta-row { display: flex; gap: var(--s2); flex-wrap: wrap; }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 13px 26px;
+            background: var(--accent); color: #fff;
+            font-size: 14px; font-weight: 600;
+            border-radius: 8px; text-decoration: none;
+            border: 2px solid var(--accent);
+            box-shadow: 0 4px 16px var(--accent-glow);
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(13,148,136,0.3);
+        }
+        .btn-ghost {
+            display: inline-block;
+            padding: 13px 26px;
+            background: transparent; color: var(--text-2);
+            font-size: 14px; font-weight: 500;
+            border-radius: 8px; text-decoration: none;
+            border: 2px solid var(--border);
+            transition: all 0.2s;
+        }
+        .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── I8 HERO MARK ───────────────────────────── */
+        .hero-mark {
+            position: absolute;
+            right: -100px;
+            bottom: -40px;
+            width: 520px;
+            height: 520px;
+            object-fit: contain;
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: multiply;
+            opacity: 0.92;
+            -webkit-mask-image: radial-gradient(ellipse 75% 80% at 58% 52%, black 35%, transparent 72%);
+            mask-image: radial-gradient(ellipse 75% 80% at 58% 52%, black 35%, transparent 72%);
+        }
+
+        /* ── SECTION DIVIDER ────────────────────────── */
+        .divider {
+            display: block; width: 100%; height: 80px;
+            background: none;
+        }
+
+        /* ── SECTION BASE ───────────────────────────── */
+        .problems { padding: var(--s7) 0; background: var(--surface); }
+        .solution  { padding: var(--s7) 0; background: var(--bg); }
+
+        .section-label {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 11px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 2px;
+            color: var(--accent); margin-bottom: var(--s2);
+        }
+        /* Circuit tick before section labels */
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 24px; height: 2px;
+            background: var(--accent);
+            border-radius: 1px;
+            box-shadow: 0 0 6px var(--accent-glow);
+        }
+        .section-label::after {
+            content: '';
+            display: inline-block;
+            width: 6px; height: 6px;
+            border: 1.5px solid var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--accent-glow);
+        }
+
+        .section-h {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(28px, 3.5vw, 44px);
+            font-weight: 700; line-height: 1.12;
+            letter-spacing: -1.2px;
+            color: var(--text-1); margin-bottom: var(--s2);
+        }
+
+        /* Circuit underline on section headings */
+        .section-h-rule {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: var(--s2);
+            margin-top: 4px;
+        }
+        .section-h-rule span:first-child {
+            display: block; width: 48px; height: 2px;
+            background: var(--accent);
+            border-radius: 1px;
+        }
+        .section-h-rule span:nth-child(2) {
+            display: block; width: 6px; height: 6px;
+            background: var(--accent); border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent);
+        }
+        .section-h-rule span:nth-child(3) {
+            display: block; width: 20px; height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 1px;
+        }
+
+        .section-sub {
+            font-size: 16px; color: var(--text-2);
+            line-height: 1.7; max-width: 580px;
+            margin-bottom: var(--s5);
+        }
+
+        /* ── PROBLEM CARDS ──────────────────────────── */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--s2);
+        }
+        .problem-card {
+            padding: var(--s4);
+            border: 1px solid rgba(13,148,136,0.28);
+            border-radius: 12px;
+            background: var(--bg);
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .problem-card > * { position: relative; z-index: 1; }
+        .problem-card:hover {
+            border-color: rgba(13,148,136,0.55);
+            box-shadow: 0 0 0 3px var(--accent-dim), 0 6px 24px rgba(13,148,136,0.12);
+            transform: translateY(-2px);
+        }
+        /* ── CARD CIRCUIT SVG ───────────────────────── */
+        .card-circuit {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+        .problem-n {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--text-3); margin-bottom: var(--s2);
+        }
+        .problem-card h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px; font-weight: 700;
+            color: var(--text-1); margin-bottom: var(--s1);
+        }
+        .problem-card p { font-size: 14px; color: var(--text-2); line-height: 1.65; }
+
+        /* ── STEPS ──────────────────────────────────── */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--s5);
+        }
+        .step { position: relative; padding-left: var(--s3); }
+        .step::before {
+            content: '';
+            position: absolute; left: 0; top: 6px;
+            width: 2px; height: calc(100% - 6px);
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            border-radius: 1px;
+        }
+        .step-n {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--accent); margin-bottom: var(--s1);
+        }
+        .step h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 17px; font-weight: 700;
+            color: var(--text-1); margin-bottom: var(--s1);
+        }
+        .step p { font-size: 14px; color: var(--text-2); line-height: 1.65; }
+
+        /* ── CTA BAND ───────────────────────────────── */
+        .cta-band {
+            padding: var(--s8) 0;
+            background: var(--text-1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-band h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(28px, 4vw, 48px);
+            font-weight: 800; letter-spacing: -1.5px;
+            color: #fff; margin-bottom: var(--s2);
+        }
+        .cta-band p {
+            font-size: 16px; color: rgba(255,255,255,0.5);
+            line-height: 1.7; margin-bottom: var(--s5);
+            max-width: 440px; margin-left: auto; margin-right: auto;
+        }
+        .btn-cta {
+            display: inline-block; padding: 15px 36px;
+            background: var(--accent); color: #fff;
+            font-size: 15px; font-weight: 600;
+            border-radius: 8px; text-decoration: none;
+            box-shadow: 0 0 32px rgba(13,148,136,0.4);
+            transition: all 0.2s;
+        }
+        .btn-cta:hover {
+            background: var(--accent-dark);
+            box-shadow: 0 0 56px rgba(13,148,136,0.55);
+            transform: translateY(-2px);
+        }
+
+        /* ── FOOTER ─────────────────────────────────── */
+        footer {
+            padding: 0 0 var(--s4);
+            background: var(--bg);
+        }
+        footer .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--s2);
+        }
+        footer p { font-size: 13px; color: var(--text-3); }
+
+        /* ── ANIMATIONS ─────────────────────────────── */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.15; }
+        }
+        @keyframes flow-dash {
+            from { stroke-dashoffset: 500; }
+            to   { stroke-dashoffset: 0; }
+        }
+        @keyframes node-pulse {
+            0%, 100% { opacity: 0.5; }
+            50%       { opacity: 1; }
+        }
+        @keyframes ripple {
+            0%   { r: 6; opacity: 0.5; }
+            100% { r: 16; opacity: 0; }
+        }
+
+        .fl   { animation: flow-dash 6s linear infinite; }
+        .fl-2 { animation: flow-dash 6s linear infinite; animation-delay: -2s; }
+        .fl-3 { animation: flow-dash 6s linear infinite; animation-delay: -4s; }
+        .nd   { animation: node-pulse 2.5s ease-in-out infinite; }
+        .nd-2 { animation: node-pulse 2.5s ease-in-out infinite; animation-delay: -0.8s; }
+        .nd-3 { animation: node-pulse 2.5s ease-in-out infinite; animation-delay: -1.7s; }
+        .rp   { animation: ripple 2.5s ease-out infinite; }
+        .rp-2 { animation: ripple 2.5s ease-out infinite; animation-delay: -1.2s; }
+
+        @keyframes card-dash { 0% { stroke-dashoffset: 200; } 100% { stroke-dashoffset: 0; } }
+        .cf   { animation: card-dash 4s linear infinite; }
+        .cf-2 { animation: card-dash 4s linear infinite; animation-delay: -1.3s; }
+        .cf-3 { animation: card-dash 4s linear infinite; animation-delay: -2.6s; }
+
+        /* ── RESPONSIVE ─────────────────────────────── */
+        @media (max-width: 768px) {
+            .hero { min-height: auto; padding: 80px 0 260px; }
+            .hero-mark { right: -180px; bottom: -60px; width: 380px; height: 460px; }
+            .steps { gap: var(--s4); }
+            nav { gap: var(--s3); }
+        }
+        @media (max-width: 600px) {
+            nav a:not(.nav-cta) { display: none; }
+            nav { gap: 0; }
+        }
+        @media (max-width: 480px) {
+            .hero { padding: 60px 0 180px; }
+            .hero::before { width: 100%; }
+            .hero-mark { opacity: 0.2; right: -160px; width: 320px; height: 390px; }
+            .cta-row { flex-direction: column; }
+            .btn-primary, .btn-ghost { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header>
+    <div class="wrap">
+        <a href="index.html" class="logo">INTRIGUE8</a>
+        <nav>
+            <a href="problems.html">Problems</a>
+            <a href="solution.html">Solution</a>
+            <a href="contact.html">Contact</a>
+            <a href="survey.html" class="nav-cta">Take Survey</a>
+        </nav>
+    </div>
+    <!-- Circuit board trace bar -->
+    <svg class="header-circuit" viewBox="0 0 1080 36" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <!-- Separator hairline -->
+        <line x1="0" y1="1" x2="1080" y2="1" stroke="#e5e7eb" stroke-width="1"/>
+        <!-- Primary trace -->
+        <line x1="0" y1="18" x2="1080" y2="18" stroke="#0d9488" stroke-width="1.5" opacity="0.32"/>
+        <!-- Upper fragments -->
+        <line x1="0" y1="8" x2="340" y2="8" stroke="#0d9488" stroke-width="0.8" opacity="0.16"/>
+        <line x1="740" y1="8" x2="1080" y2="8" stroke="#0d9488" stroke-width="0.8" opacity="0.16"/>
+        <!-- Lower fragments -->
+        <line x1="0" y1="28" x2="300" y2="28" stroke="#0369a1" stroke-width="0.8" opacity="0.13"/>
+        <line x1="780" y1="28" x2="1080" y2="28" stroke="#0369a1" stroke-width="0.8" opacity="0.13"/>
+        <!-- Left bridge cluster -->
+        <line x1="80" y1="8" x2="80" y2="28" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <circle cx="80" cy="18" r="2.5" fill="#0d9488" opacity="0.45"/>
+        <line x1="340" y1="8" x2="340" y2="18" stroke="#0d9488" stroke-width="1" opacity="0.18"/>
+        <circle cx="340" cy="8" r="2" fill="#0d9488" opacity="0.3"/>
+        <!-- Center IC element -->
+        <rect x="504" y="12" width="72" height="12" rx="2" fill="none" stroke="#0d9488" stroke-width="1.2" opacity="0.42"/>
+        <circle cx="504" cy="18" r="3" fill="#0d9488" opacity="0.5" class="nd"/>
+        <circle cx="576" cy="18" r="3" fill="#0d9488" opacity="0.5" class="nd-2"/>
+        <line x1="468" y1="18" x2="504" y2="18" stroke="#0d9488" stroke-width="1.2" opacity="0.35"/>
+        <line x1="576" y1="18" x2="612" y2="18" stroke="#0d9488" stroke-width="1.2" opacity="0.35"/>
+        <text x="540" y="21" font-family="monospace" font-size="6" fill="#0d9488" text-anchor="middle" opacity="0.5">I8·SYS</text>
+        <!-- Right bridge cluster -->
+        <line x1="740" y1="8" x2="740" y2="18" stroke="#0d9488" stroke-width="1" opacity="0.18"/>
+        <circle cx="740" cy="8" r="2" fill="#0d9488" opacity="0.3"/>
+        <line x1="1000" y1="8" x2="1000" y2="28" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <circle cx="1000" cy="18" r="2.5" fill="#0d9488" opacity="0.45"/>
+        <!-- Tick marks -->
+        <line x1="160" y1="15" x2="160" y2="21" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <line x1="240" y1="15.5" x2="240" y2="20.5" stroke="#0d9488" stroke-width="0.8" opacity="0.16"/>
+        <line x1="840" y1="15" x2="840" y2="21" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <line x1="920" y1="15.5" x2="920" y2="20.5" stroke="#0d9488" stroke-width="0.8" opacity="0.16"/>
+        <!-- Corner pads -->
+        <rect x="3" y="5" width="7" height="7" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.25"/>
+        <rect x="1070" y="5" width="7" height="7" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.25"/>
+        <!-- Animated flow pulse -->
+        <line x1="0" y1="18" x2="1080" y2="18" stroke="#0d9488" stroke-width="1.5" opacity="0.28" stroke-dasharray="80 1000" class="fl"/>
+    </svg>
+</header>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+    <div class="wrap">
+        <div class="hero-content">
+            <h1>Stop losing hours<br>to <span class="hi">admin work.</span></h1>
+            <p class="hero-sub">Intrigue8 builds agentic systems that turn scattered job notes into structured data, invoices, and business clarity — automatically.</p>
+            <div class="cta-row">
+                <a href="survey.html" class="btn-primary">Take the 3-min survey →</a>
+                <a href="problems.html" class="btn-ghost">See the problem</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- I8 MARK ─────────────────────────── -->
+    <img class="hero-mark" src="i8-mark.png" alt="">
+    <svg style="display:none" viewBox="0 0 520 680" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <filter id="glow" color-interpolation-filters="sRGB" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="glow-lg" color-interpolation-filters="sRGB" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="6" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+        </defs>
+
+        <!-- ────── LETTER  I ────── -->
+        <!-- Vertical stroke -->
+        <line x1="82" y1="100" x2="82" y2="580"
+              stroke="#161616" stroke-width="30" stroke-linecap="round" opacity="0.88"/>
+        <!-- Top serif -->
+        <rect x="50" y="88" width="64" height="13" rx="3" fill="#161616" opacity="0.88"/>
+        <!-- Bottom serif -->
+        <rect x="50" y="579" width="64" height="13" rx="3" fill="#161616" opacity="0.88"/>
+
+        <!-- Circuit trace running along I spine -->
+        <line x1="82" y1="103" x2="82" y2="577"
+              stroke="#0d9488" stroke-width="1.5" opacity="0.45"
+              stroke-dasharray="500" stroke-dashoffset="500" class="fl"/>
+
+        <!-- Nodes on I with horizontal ticks -->
+        <line x1="65" y1="220" x2="99" y2="220" stroke="#0d9488" stroke-width="1.2" opacity="0.4"/>
+        <circle cx="82" cy="220" r="3.5" fill="#0d9488" filter="url(#glow)" class="nd" opacity="0.75"/>
+
+        <line x1="65" y1="340" x2="99" y2="340" stroke="#0d9488" stroke-width="1.2" opacity="0.4"/>
+        <circle cx="82" cy="340" r="3.5" fill="#0d9488" filter="url(#glow)" class="nd-2" opacity="0.75"/>
+
+        <line x1="65" y1="460" x2="99" y2="460" stroke="#0d9488" stroke-width="1.2" opacity="0.4"/>
+        <circle cx="82" cy="460" r="3.5" fill="#0d9488" filter="url(#glow)" class="nd-3" opacity="0.75"/>
+
+        <!-- Branch from I to 8 -->
+        <path d="M 82,340 L 145,340 L 180,315"
+              stroke="#0d9488" stroke-width="1.2" fill="none"
+              stroke-linecap="round" opacity="0.3"/>
+        <circle cx="145" cy="340" r="2" fill="#0d9488" opacity="0.4"/>
+
+        <!-- ────── LETTER  8 ────── -->
+        <!--
+            Two loops meeting at waist point (330, 340).
+            Top loop:    centre ≈ (330, 215),  spans y 90–340
+            Bottom loop: centre ≈ (330, 475),  spans y 340–590
+        -->
+
+        <!-- Top loop — outer form -->
+        <path d="
+            M 330,340
+            C 215,330  185,270  190,210
+            C 195,145  255,100  330,100
+            C 405,100  465,145  470,210
+            C 475,270  445,330  330,340
+            Z
+        " stroke="#161616" stroke-width="26"
+          stroke-linecap="round" stroke-linejoin="round"
+          fill="none" opacity="0.88"/>
+
+        <!-- Bottom loop — outer form -->
+        <path d="
+            M 330,340
+            C 215,350  185,410  190,470
+            C 195,535  255,580  330,580
+            C 405,580  465,535  470,470
+            C 475,410  445,350  330,340
+            Z
+        " stroke="#161616" stroke-width="26"
+          stroke-linecap="round" stroke-linejoin="round"
+          fill="none" opacity="0.88"/>
+
+        <!--
+            Celtic interlace at the waist (330,340).
+            Left side of "8" crosses the right side here.
+            Technique: draw the "over" strand, then mask the "under" strand
+            with a background-coloured cap, then redraw the front strand.
+        -->
+        <!-- Left strand going top→bottom (will be OVER) -->
+        <path d="M 225,320 Q 265,338 280,356"
+              stroke="#161616" stroke-width="30"
+              stroke-linecap="round" fill="none" opacity="0.88"/>
+        <!-- Right strand going top→bottom — white mask to simulate going UNDER -->
+        <path d="M 395,318 Q 368,334 355,352"
+              stroke="#f7f6f4" stroke-width="20"
+              stroke-linecap="round" fill="none"/>
+        <!-- Right strand redrawn thin, visible above the break -->
+        <path d="M 395,318 Q 368,334 355,352"
+              stroke="#161616" stroke-width="12"
+              stroke-linecap="round" fill="none" opacity="0.75"/>
+
+        <!-- Celtic geometry — inner strand traces (animated) -->
+        <!-- Top loop inner -->
+        <path d="M 330,115 C 265,120 210,165 210,220 C 210,270 252,305 295,322"
+              stroke="#0d9488" stroke-width="1.8" fill="none" opacity="0.5"
+              stroke-dasharray="400" stroke-dashoffset="400" class="fl"/>
+        <!-- Bottom loop inner -->
+        <path d="M 365,358 C 400,372 445,415 445,468 C 445,520 398,560 345,568"
+              stroke="#0369a1" stroke-width="1.8" fill="none" opacity="0.5"
+              stroke-dasharray="400" stroke-dashoffset="400" class="fl-2"/>
+
+        <!-- Circuit branches off the 8 -->
+        <!-- Top-right -->
+        <path d="M 452,195 L 480,195 L 498,175 L 498,145"
+              stroke="#0d9488" stroke-width="1.4" fill="none"
+              stroke-linecap="round" opacity="0.4"/>
+        <circle cx="498" cy="145" r="4" fill="#0d9488"
+                filter="url(#glow)" class="nd" opacity="0.8"/>
+        <!-- ripple on top-right node -->
+        <circle cx="498" cy="145" r="6" fill="none"
+                stroke="#0d9488" stroke-width="1" class="rp" opacity="0"/>
+
+        <!-- Top-left -->
+        <path d="M 208,195 L 175,195 L 158,175"
+              stroke="#0d9488" stroke-width="1.4" fill="none"
+              stroke-linecap="round" opacity="0.35"/>
+        <circle cx="158" cy="175" r="3" fill="#0d9488" opacity="0.5" class="nd-3"/>
+
+        <!-- Bottom-right -->
+        <path d="M 455,465 L 488,465 L 505,490 L 505,515"
+              stroke="#0369a1" stroke-width="1.4" fill="none"
+              stroke-linecap="round" opacity="0.4"/>
+        <circle cx="505" cy="515" r="4" fill="#0369a1"
+                filter="url(#glow)" class="nd-2" opacity="0.8"/>
+        <circle cx="505" cy="515" r="6" fill="none"
+                stroke="#0369a1" stroke-width="1" class="rp-2" opacity="0"/>
+
+        <!-- Bottom-left -->
+        <path d="M 208,465 L 175,465 L 158,490 L 158,510"
+              stroke="#0d9488" stroke-width="1.4" fill="none"
+              stroke-linecap="round" opacity="0.35"/>
+        <circle cx="158" cy="510" r="3" fill="#0d9488" opacity="0.5" class="nd"/>
+
+        <!-- Center waist node — the anchor point of the Celtic cross -->
+        <circle cx="330" cy="340" r="5" fill="#0d9488"
+                filter="url(#glow-lg)" class="nd" opacity="0.9"/>
+        <circle cx="330" cy="340" r="9" fill="none"
+                stroke="#0d9488" stroke-width="1.5" opacity="0.3" class="nd-2"/>
+        <circle cx="330" cy="340" r="14" fill="none"
+                stroke="#0d9488" stroke-width="1" opacity="0.15" class="nd-3"/>
+    </svg>
+</section>
+
+<!-- ═══════════ DIVIDER ═══════════ -->
+<svg class="divider" viewBox="0 0 1080 80" fill="none"
+     xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <line x1="0" y1="40" x2="1080" y2="40" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="0" y1="40" x2="220" y2="40" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+    <line x1="860" y1="40" x2="1080" y2="40" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+    <line x1="160" y1="22" x2="450" y2="22" stroke="#0d9488" stroke-width="0.9" opacity="0.18"/>
+    <line x1="630" y1="22" x2="920" y2="22" stroke="#0d9488" stroke-width="0.9" opacity="0.18"/>
+    <line x1="180" y1="58" x2="430" y2="58" stroke="#0369a1" stroke-width="0.9" opacity="0.14"/>
+    <line x1="650" y1="58" x2="900" y2="58" stroke="#0369a1" stroke-width="0.9" opacity="0.14"/>
+    <line x1="420" y1="40" x2="492" y2="40" stroke="#0d9488" stroke-width="1.5" opacity="0.42"/>
+    <line x1="588" y1="40" x2="660" y2="40" stroke="#0d9488" stroke-width="1.5" opacity="0.42"/>
+    <circle cx="540" cy="40" r="8" fill="none" stroke="#0d9488" stroke-width="2" opacity="0.55" class="nd"/>
+    <circle cx="540" cy="40" r="3" fill="#0d9488" opacity="0.7"/>
+    <circle cx="540" cy="40" r="14" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.16" class="nd-2"/>
+    <path d="M 540,32 L 540,22 L 562,22 L 572,12" stroke="#0d9488" stroke-width="1.2" fill="none" opacity="0.32"/>
+    <circle cx="562" cy="22" r="2.5" fill="#0d9488" opacity="0.38" class="nd-3"/>
+    <circle cx="572" cy="12" r="3" fill="#0d9488" opacity="0.42" class="nd"/>
+    <path d="M 540,48 L 540,58 L 518,58 L 508,68" stroke="#0d9488" stroke-width="1.2" fill="none" opacity="0.32"/>
+    <circle cx="518" cy="58" r="2.5" fill="#0d9488" opacity="0.38" class="nd-2"/>
+    <circle cx="508" cy="68" r="3" fill="#0d9488" opacity="0.42" class="nd-3"/>
+    <circle cx="270" cy="40" r="5" fill="none" stroke="#0d9488" stroke-width="1.4" opacity="0.34"/>
+    <circle cx="270" cy="40" r="2" fill="#0d9488" opacity="0.42"/>
+    <line x1="228" y1="40" x2="250" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="290" y1="40" x2="315" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <path d="M 270,35 L 270,22 L 292,22" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.22"/>
+    <circle cx="292" cy="22" r="2" fill="#0d9488" opacity="0.28"/>
+    <path d="M 270,45 L 270,58 L 248,58" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.18"/>
+    <circle cx="248" cy="58" r="1.5" fill="#0d9488" opacity="0.22"/>
+    <circle cx="810" cy="40" r="5" fill="none" stroke="#0d9488" stroke-width="1.4" opacity="0.34"/>
+    <circle cx="810" cy="40" r="2" fill="#0d9488" opacity="0.42"/>
+    <line x1="765" y1="40" x2="790" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="830" y1="40" x2="852" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <path d="M 810,35 L 810,22 L 832,22" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.18"/>
+    <circle cx="832" cy="22" r="1.5" fill="#0d9488" opacity="0.22"/>
+    <path d="M 810,45 L 810,58 L 788,58" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.22"/>
+    <circle cx="788" cy="58" r="2" fill="#0d9488" opacity="0.28"/>
+    <line x1="135" y1="36" x2="135" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="135" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="405" y1="36" x2="405" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="405" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="675" y1="36" x2="675" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="675" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="945" y1="36" x2="945" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="945" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="0" y1="40" x2="1080" y2="40" stroke="#0d9488" stroke-width="2" opacity="0.22" stroke-dasharray="100 980" class="fl"/>
+</svg>
+
+<!-- ═══════════ PROBLEMS ═══════════ -->
+<section class="problems">
+    <div class="wrap">
+        <p class="section-label">The problem</p>
+        <h2 class="section-h">Admin work is a hidden profit killer.</h2>
+        <div class="section-h-rule"><span></span><span></span><span></span></div>
+        <p class="section-sub">For contractors and service businesses across Ireland, hours disappear into invoicing, paperwork, and chasing data that should organize itself.</p>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                    <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                    <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf" opacity="0.55"/>
+                    <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf-2" opacity="0.42"/>
+                    <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf-3" opacity="0.35"/>
+                    <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                    <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                </svg>
+                <p class="problem-n">01</p>
+                <h3>Time lost to manual admin</h3>
+                <p>Invoicing, tracking jobs, copying notes. Billable hours wasted on work that software should handle.</p>
+            </div>
+            <div class="problem-card">
+                <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                    <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                    <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf-2" opacity="0.55"/>
+                    <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf-3" opacity="0.42"/>
+                    <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf" opacity="0.35"/>
+                    <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                    <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                </svg>
+                <p class="problem-n">02</p>
+                <h3>Data scattered everywhere</h3>
+                <p>WhatsApp, email, notebooks, spreadsheets — nothing connects. You can't see your business clearly.</p>
+            </div>
+            <div class="problem-card">
+                <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                    <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                    <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf-3" opacity="0.55"/>
+                    <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf" opacity="0.42"/>
+                    <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf-2" opacity="0.35"/>
+                    <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                    <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                </svg>
+                <p class="problem-n">03</p>
+                <h3>No visibility on profit</h3>
+                <p>Which jobs made money? Without clean data, you're pricing by gut — and margins suffer silently.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DIVIDER -->
+<svg class="divider" viewBox="0 0 1080 80" fill="none"
+     xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <line x1="0" y1="40" x2="1080" y2="40" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="0" y1="40" x2="220" y2="40" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+    <line x1="860" y1="40" x2="1080" y2="40" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+    <line x1="160" y1="22" x2="450" y2="22" stroke="#0d9488" stroke-width="0.9" opacity="0.18"/>
+    <line x1="630" y1="22" x2="920" y2="22" stroke="#0d9488" stroke-width="0.9" opacity="0.18"/>
+    <line x1="180" y1="58" x2="430" y2="58" stroke="#0369a1" stroke-width="0.9" opacity="0.14"/>
+    <line x1="650" y1="58" x2="900" y2="58" stroke="#0369a1" stroke-width="0.9" opacity="0.14"/>
+    <line x1="420" y1="40" x2="492" y2="40" stroke="#0d9488" stroke-width="1.5" opacity="0.42"/>
+    <line x1="588" y1="40" x2="660" y2="40" stroke="#0d9488" stroke-width="1.5" opacity="0.42"/>
+    <circle cx="540" cy="40" r="8" fill="none" stroke="#0d9488" stroke-width="2" opacity="0.55" class="nd"/>
+    <circle cx="540" cy="40" r="3" fill="#0d9488" opacity="0.7"/>
+    <circle cx="540" cy="40" r="14" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.16" class="nd-2"/>
+    <path d="M 540,32 L 540,22 L 562,22 L 572,12" stroke="#0d9488" stroke-width="1.2" fill="none" opacity="0.32"/>
+    <circle cx="562" cy="22" r="2.5" fill="#0d9488" opacity="0.38" class="nd-3"/>
+    <circle cx="572" cy="12" r="3" fill="#0d9488" opacity="0.42" class="nd"/>
+    <path d="M 540,48 L 540,58 L 518,58 L 508,68" stroke="#0d9488" stroke-width="1.2" fill="none" opacity="0.32"/>
+    <circle cx="518" cy="58" r="2.5" fill="#0d9488" opacity="0.38" class="nd-2"/>
+    <circle cx="508" cy="68" r="3" fill="#0d9488" opacity="0.42" class="nd-3"/>
+    <circle cx="270" cy="40" r="5" fill="none" stroke="#0d9488" stroke-width="1.4" opacity="0.34"/>
+    <circle cx="270" cy="40" r="2" fill="#0d9488" opacity="0.42"/>
+    <line x1="228" y1="40" x2="250" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="290" y1="40" x2="315" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <path d="M 270,35 L 270,22 L 292,22" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.22"/>
+    <circle cx="292" cy="22" r="2" fill="#0d9488" opacity="0.28"/>
+    <path d="M 270,45 L 270,58 L 248,58" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.18"/>
+    <circle cx="248" cy="58" r="1.5" fill="#0d9488" opacity="0.22"/>
+    <circle cx="810" cy="40" r="5" fill="none" stroke="#0d9488" stroke-width="1.4" opacity="0.34"/>
+    <circle cx="810" cy="40" r="2" fill="#0d9488" opacity="0.42"/>
+    <line x1="765" y1="40" x2="790" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="830" y1="40" x2="852" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <path d="M 810,35 L 810,22 L 832,22" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.18"/>
+    <circle cx="832" cy="22" r="1.5" fill="#0d9488" opacity="0.22"/>
+    <path d="M 810,45 L 810,58 L 788,58" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.22"/>
+    <circle cx="788" cy="58" r="2" fill="#0d9488" opacity="0.28"/>
+    <line x1="135" y1="36" x2="135" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="135" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="405" y1="36" x2="405" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="405" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="675" y1="36" x2="675" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="675" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="945" y1="36" x2="945" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="945" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="0" y1="40" x2="1080" y2="40" stroke="#0d9488" stroke-width="2" opacity="0.22" stroke-dasharray="100 980" class="fl-2"/>
+</svg>
+
+<!-- ═══════════ SOLUTION ═══════════ -->
+<section class="solution">
+    <div class="wrap">
+        <p class="section-label">How it works</p>
+        <h2 class="section-h">One system. Everything connected.</h2>
+        <div class="section-h-rule"><span></span><span></span><span></span></div>
+        <p class="section-sub">Intrigue8 captures what happens on the job and turns it into structured data, invoices, and insights — without manual work.</p>
+        <div class="steps">
+            <div class="step">
+                <p class="step-n">Step 01</p>
+                <h3>Capture the job</h3>
+                <p>Voice note, quick text, or photo. Log what you did on the day, in seconds.</p>
+            </div>
+            <div class="step">
+                <p class="step-n">Step 02</p>
+                <h3>System processes it</h3>
+                <p>Agentic workflows extract client, job details, costs, and materials automatically.</p>
+            </div>
+            <div class="step">
+                <p class="step-n">Step 03</p>
+                <h3>Invoice ready to send</h3>
+                <p>Professional invoice generated. Client records updated. Nothing to do manually.</p>
+            </div>
+            <div class="step">
+                <p class="step-n">Step 04</p>
+                <h3>See your business clearly</h3>
+                <p>Every job tracked. Costs visible. Profitability by job type, client, and week.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section class="cta-band">
+    <!-- Subtle background circuit pattern -->
+    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.07"
+         viewBox="0 0 1080 320" preserveAspectRatio="xMidYMid slice">
+        <path d="M 0,100 L 280,100 L 380,80 L 540,155 L 700,80 L 800,100 L 1080,100"
+              stroke="#0d9488" stroke-width="1.5" fill="none"/>
+        <path d="M 0,220 L 200,220 L 300,200 L 540,245 L 780,200 L 880,220 L 1080,220"
+              stroke="#0d9488" stroke-width="1" fill="none" opacity="0.5"/>
+        <circle cx="280" cy="100" r="4" fill="#0d9488"/>
+        <circle cx="800" cy="100" r="4" fill="#0d9488"/>
+        <circle cx="540" cy="155" r="7" fill="#0d9488"/>
+        <circle cx="300" cy="200" r="3" fill="#0d9488" opacity="0.6"/>
+        <circle cx="780" cy="200" r="3" fill="#0d9488" opacity="0.6"/>
+    </svg>
+    <div class="wrap" style="position:relative;z-index:1;">
+        <h2>Ready to get your time back?</h2>
+        <p>We're looking for service businesses to shape the first version. Three minutes, five questions.</p>
+        <a href="survey.html" class="btn-cta">Start the survey →</a>
+    </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+    <!-- Circuit board separator -->
+    <svg class="footer-circuit" viewBox="0 0 1080 44" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <!-- Separator hairline at top -->
+        <line x1="0" y1="2" x2="1080" y2="2" stroke="#e5e7eb" stroke-width="1"/>
+        <!-- Primary trace below separator -->
+        <line x1="0" y1="20" x2="1080" y2="20" stroke="#0d9488" stroke-width="1.5" opacity="0.28"/>
+        <!-- Upper fragment traces -->
+        <line x1="0" y1="10" x2="380" y2="10" stroke="#0d9488" stroke-width="0.8" opacity="0.15"/>
+        <line x1="700" y1="10" x2="1080" y2="10" stroke="#0d9488" stroke-width="0.8" opacity="0.15"/>
+        <!-- Lower fragment traces -->
+        <line x1="0" y1="32" x2="350" y2="32" stroke="#0369a1" stroke-width="0.8" opacity="0.12"/>
+        <line x1="730" y1="32" x2="1080" y2="32" stroke="#0369a1" stroke-width="0.8" opacity="0.12"/>
+        <!-- Left bridge -->
+        <line x1="100" y1="10" x2="100" y2="32" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <circle cx="100" cy="20" r="2.5" fill="#0d9488" opacity="0.38"/>
+        <line x1="380" y1="10" x2="380" y2="20" stroke="#0d9488" stroke-width="1" opacity="0.18"/>
+        <circle cx="380" cy="10" r="2" fill="#0d9488" opacity="0.28"/>
+        <!-- Centre node -->
+        <circle cx="540" cy="20" r="6" fill="none" stroke="#0d9488" stroke-width="1.8" opacity="0.48" class="nd"/>
+        <circle cx="540" cy="20" r="2.5" fill="#0d9488" opacity="0.58"/>
+        <line x1="496" y1="20" x2="520" y2="20" stroke="#0d9488" stroke-width="1.2" opacity="0.38"/>
+        <line x1="560" y1="20" x2="584" y2="20" stroke="#0d9488" stroke-width="1.2" opacity="0.38"/>
+        <!-- Centre branch down -->
+        <path d="M 540,26 L 540,36 L 556,36 L 564,42" stroke="#0d9488" stroke-width="1" fill="none" opacity="0.25"/>
+        <circle cx="556" cy="36" r="2" fill="#0d9488" opacity="0.3"/>
+        <!-- Quarter nodes -->
+        <circle cx="270" cy="20" r="3.5" fill="none" stroke="#0d9488" stroke-width="1.2" opacity="0.28"/>
+        <circle cx="270" cy="20" r="1.5" fill="#0d9488" opacity="0.36"/>
+        <circle cx="810" cy="20" r="3.5" fill="none" stroke="#0d9488" stroke-width="1.2" opacity="0.28"/>
+        <circle cx="810" cy="20" r="1.5" fill="#0d9488" opacity="0.36"/>
+        <!-- Right bridge -->
+        <line x1="700" y1="10" x2="700" y2="20" stroke="#0d9488" stroke-width="1" opacity="0.18"/>
+        <circle cx="700" cy="10" r="2" fill="#0d9488" opacity="0.28"/>
+        <line x1="980" y1="10" x2="980" y2="32" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <circle cx="980" cy="20" r="2.5" fill="#0d9488" opacity="0.38"/>
+        <!-- Tick marks -->
+        <line x1="180" y1="17" x2="180" y2="23" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <line x1="450" y1="17" x2="450" y2="23" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <line x1="630" y1="17" x2="630" y2="23" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <line x1="900" y1="17" x2="900" y2="23" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <!-- Corner pads -->
+        <rect x="3" y="28" width="6" height="6" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <rect x="1071" y="28" width="6" height="6" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <!-- Flow pulse -->
+        <line x1="0" y1="20" x2="1080" y2="20" stroke="#0d9488" stroke-width="1.5" opacity="0.22" stroke-dasharray="80 1000" class="fl-3"/>
+    </svg>
+    <div class="wrap">
+        <p>&copy; 2026 Intrigue8</p>
+        <p>Systems for Irish service businesses.</p>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — Intrigue8</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f7f6f4; --surface: #ffffff;
+            --text-1: #161616; --text-2: #64748b; --text-3: #94a3b8;
+            --accent: #0d9488; --accent-dim: rgba(13,148,136,0.08);
+            --accent-glow: rgba(13,148,136,0.2); --accent-dark: #0b7a70;
+            --border: rgba(0,0,0,0.07);
+            --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px; --s8:128px;
+        }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text-1); line-height:1.6; overflow-x:hidden; }
+        .wrap { max-width:1080px; margin:0 auto; padding:0 var(--s4); }
+
+        header { position:sticky; top:0; z-index:100; background:rgba(247,246,244,0.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
+        .header-circuit { display:block; width:100%; height:36px; }
+        .footer-circuit { display:block; width:100%; height:44px; }
+        header .wrap { display:flex; justify-content:space-between; align-items:center; padding-top:20px; padding-bottom:20px; }
+        .logo { font-family:'Plus Jakarta Sans',sans-serif; font-size:18px; font-weight:800; letter-spacing:1px; color:var(--text-1); text-decoration:none; }
+        nav { display:flex; gap:var(--s4); }
+        nav a { font-size:14px; font-weight:500; color:var(--text-2); text-decoration:none; transition:color 0.2s; }
+        nav a:hover { color:var(--accent); }
+        nav .nav-cta { color:var(--accent); border:1.5px solid var(--accent); padding:5px 14px; border-radius:6px; font-size:13px; transition:background 0.2s, color 0.2s; }
+        nav .nav-cta:hover { background:var(--accent); color:#fff; }
+
+        .page-hero { padding: var(--s7) 0 var(--s6); background:var(--bg); border-bottom: 1px solid var(--border); }
+        .page-hero h1 { font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(32px,4.5vw,56px); font-weight:800; letter-spacing:-2px; color:var(--text-1); margin-bottom:var(--s2); line-height:1.08; }
+        .page-hero p { font-size:17px; color:var(--text-2); max-width:560px; line-height:1.7; }
+
+        .section-label { display:flex; align-items:center; gap:10px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--accent); margin-bottom:var(--s2); }
+        .section-label::before { content:''; display:inline-block; width:24px; height:2px; background:var(--accent); border-radius:1px; box-shadow:0 0 6px var(--accent-glow); }
+        .section-label::after { content:''; display:inline-block; width:6px; height:6px; border:1.5px solid var(--accent); border-radius:50%; box-shadow:0 0 6px var(--accent-glow); }
+
+        .section-h { font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(28px,3.5vw,44px); font-weight:700; line-height:1.12; letter-spacing:-1.2px; color:var(--text-1); margin-bottom:var(--s2); }
+        .section-h-rule { display:flex; align-items:center; gap:8px; margin-bottom:var(--s2); margin-top:4px; }
+        .section-h-rule span:first-child { display:block; width:48px; height:2px; background:var(--accent); border-radius:1px; }
+        .section-h-rule span:nth-child(2) { display:block; width:6px; height:6px; background:var(--accent); border-radius:50%; box-shadow:0 0 8px var(--accent); }
+        .section-h-rule span:nth-child(3) { display:block; width:20px; height:2px; background:linear-gradient(90deg,var(--accent),transparent); border-radius:1px; }
+        .section-sub { font-size:16px; color:var(--text-2); line-height:1.7; max-width:580px; margin-bottom:var(--s5); }
+
+        .btn-primary { display:inline-block; padding:13px 26px; background:var(--accent); color:#fff; font-size:14px; font-weight:600; border-radius:8px; text-decoration:none; border:2px solid var(--accent); box-shadow:0 4px 16px var(--accent-glow); transition:all 0.2s; cursor:pointer; font-family:inherit; }
+        .btn-primary:hover { background:var(--accent-dark); border-color:var(--accent-dark); transform:translateY(-1px); box-shadow:0 8px 24px rgba(13,148,136,0.3); }
+        .btn-ghost { display:inline-block; padding:13px 26px; background:transparent; color:var(--text-2); font-size:14px; font-weight:500; border-radius:8px; text-decoration:none; border:2px solid var(--border); transition:all 0.2s; }
+        .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+
+        .card { padding:var(--s4); border:1px solid rgba(13,148,136,0.28); border-radius:12px; background:var(--surface); transition:all 0.25s; position:relative; overflow:hidden; }
+        .card > * { position:relative; z-index:1; }
+        .card:hover { border-color:rgba(13,148,136,0.55); box-shadow:0 0 0 3px var(--accent-dim),0 6px 24px rgba(13,148,136,0.12); transform:translateY(-2px); }
+        .card-circuit { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+
+        .divider { display:block; width:100%; height:80px; background:none; }
+
+        footer { padding:0 0 var(--s4); background:var(--bg); }
+        footer .wrap { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s2); }
+        footer p { font-size:13px; color:var(--text-3); }
+
+        /* Forms */
+        .form-label { display:block; margin-bottom:6px; font-size:14px; font-weight:500; color:var(--text-1); }
+        input[type=text], input[type=email], input[type=tel], textarea, select {
+            width:100%; padding:11px 14px; border:1px solid rgba(13,148,136,0.25); border-radius:8px;
+            background:var(--surface); color:var(--text-1); font-family:inherit; font-size:14px;
+            transition:all 0.2s; outline:none;
+        }
+        input[type=text]:focus, input[type=email]:focus, input[type=tel]:focus, textarea:focus, select:focus {
+            border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim);
+        }
+        input::placeholder, textarea::placeholder { color:var(--text-3); }
+        textarea { resize:vertical; min-height:110px; }
+
+        input[type=radio], input[type=checkbox] { accent-color:var(--accent); width:17px; height:17px; cursor:pointer; flex-shrink:0; }
+        .option-row { display:flex; align-items:center; gap:10px; cursor:pointer; padding:4px 0; }
+        .option-row:hover span { color:var(--accent); }
+        .option-row span { font-size:15px; color:var(--text-2); transition:color 0.2s; }
+
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+        @keyframes flow-dash { from{stroke-dashoffset:500} to{stroke-dashoffset:0} }
+        @keyframes node-pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+        @keyframes card-dash { 0%{stroke-dashoffset:200} 100%{stroke-dashoffset:0} }
+        .fl   { animation:flow-dash 6s linear infinite; }
+        .fl-2 { animation:flow-dash 6s linear infinite; animation-delay:-2s; }
+        .fl-3 { animation:flow-dash 6s linear infinite; animation-delay:-4s; }
+        .nd   { animation:node-pulse 2.5s ease-in-out infinite; }
+        .nd-2 { animation:node-pulse 2.5s ease-in-out infinite; animation-delay:-0.8s; }
+        .nd-3 { animation:node-pulse 2.5s ease-in-out infinite; animation-delay:-1.7s; }
+        .cf   { animation:card-dash 4s linear infinite; }
+        .cf-2 { animation:card-dash 4s linear infinite; animation-delay:-1.3s; }
+        .cf-3 { animation:card-dash 4s linear infinite; animation-delay:-2.6s; }
+
+        @media(max-width:768px){ nav{gap:var(--s3);} .page-hero{padding:var(--s6) 0 var(--s5);} }
+        @media(max-width:768px){ .contact-layout{grid-template-columns:1fr;} }
+        @media(max-width:600px){ nav a:not(.nav-cta){display:none;} nav{gap:0;} }
+        @media(max-width:480px){ .btn-primary,.btn-ghost{display:block;text-align:center;} }
+
+        /* Page-specific */
+        .contact-layout { display:grid; grid-template-columns:1fr 1fr; gap:var(--s6); align-items:start; }
+        .contact-info h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:22px; font-weight:700; color:var(--text-1); margin-bottom:var(--s2); }
+        .contact-info p { font-size:15px; color:var(--text-2); line-height:1.7; margin-bottom:var(--s3); }
+        .contact-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); font-weight:600; font-size:14px; text-decoration:none; transition:color 0.2s; }
+        .contact-link:hover { color:var(--accent-dark); }
+        .form-group { margin-bottom:var(--s3); }
+        .form-section h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:20px; font-weight:700; color:var(--text-1); margin-bottom:var(--s4); }
+        .content-section { padding:var(--s7) 0; }
+        @media(max-width:768px){ .contact-layout{grid-template-columns:1fr;} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="wrap">
+        <a href="index.html" class="logo">INTRIGUE8</a>
+        <nav>
+            <a href="problems.html">Problems</a>
+            <a href="solution.html">Solution</a>
+            <a href="contact.html">Contact</a>
+            <a href="survey.html" class="nav-cta">Take Survey</a>
+        </nav>
+    </div>
+    <svg class="header-circuit" viewBox="0 0 1080 36" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <line x1="0" y1="1" x2="1080" y2="1" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="0" y1="18" x2="1080" y2="18" stroke="#0d9488" stroke-width="1.5" opacity="0.32"/>
+        <line x1="0" y1="8" x2="340" y2="8" stroke="#0d9488" stroke-width="0.8" opacity="0.16"/>
+        <line x1="740" y1="8" x2="1080" y2="8" stroke="#0d9488" stroke-width="0.8" opacity="0.16"/>
+        <line x1="0" y1="28" x2="300" y2="28" stroke="#0369a1" stroke-width="0.8" opacity="0.13"/>
+        <line x1="780" y1="28" x2="1080" y2="28" stroke="#0369a1" stroke-width="0.8" opacity="0.13"/>
+        <line x1="80" y1="8" x2="80" y2="28" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <circle cx="80" cy="18" r="2.5" fill="#0d9488" opacity="0.45"/>
+        <line x1="340" y1="8" x2="340" y2="18" stroke="#0d9488" stroke-width="1" opacity="0.18"/>
+        <circle cx="340" cy="8" r="2" fill="#0d9488" opacity="0.3"/>
+        <rect x="504" y="12" width="72" height="12" rx="2" fill="none" stroke="#0d9488" stroke-width="1.2" opacity="0.42"/>
+        <circle cx="504" cy="18" r="3" fill="#0d9488" opacity="0.5" class="nd"/>
+        <circle cx="576" cy="18" r="3" fill="#0d9488" opacity="0.5" class="nd-2"/>
+        <line x1="468" y1="18" x2="504" y2="18" stroke="#0d9488" stroke-width="1.2" opacity="0.35"/>
+        <line x1="576" y1="18" x2="612" y2="18" stroke="#0d9488" stroke-width="1.2" opacity="0.35"/>
+        <text x="540" y="21" font-family="monospace" font-size="6" fill="#0d9488" text-anchor="middle" opacity="0.5">I8·SYS</text>
+        <line x1="740" y1="8" x2="740" y2="18" stroke="#0d9488" stroke-width="1" opacity="0.18"/>
+        <circle cx="740" cy="8" r="2" fill="#0d9488" opacity="0.3"/>
+        <line x1="1000" y1="8" x2="1000" y2="28" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <circle cx="1000" cy="18" r="2.5" fill="#0d9488" opacity="0.45"/>
+        <line x1="160" y1="15" x2="160" y2="21" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <line x1="840" y1="15" x2="840" y2="21" stroke="#0d9488" stroke-width="1" opacity="0.22"/>
+        <rect x="3" y="5" width="7" height="7" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.25"/>
+        <rect x="1070" y="5" width="7" height="7" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.25"/>
+        <line x1="0" y1="18" x2="1080" y2="18" stroke="#0d9488" stroke-width="1.5" opacity="0.28" stroke-dasharray="80 1000" class="fl"/>
+    </svg>
+</header>
+
+<section class="page-hero">
+    <div class="wrap">
+        <div class="section-label">Get in touch</div>
+        <h1>Talk to us.</h1>
+        <p>Questions, demos, or just want to share your admin pain? We're all ears.</p>
+    </div>
+</section>
+
+<svg class="divider" viewBox="0 0 1080 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <line x1="0" y1="40" x2="1080" y2="40" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="0" y1="40" x2="220" y2="40" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+    <line x1="860" y1="40" x2="1080" y2="40" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+    <line x1="160" y1="22" x2="450" y2="22" stroke="#0d9488" stroke-width="0.9" opacity="0.18"/>
+    <line x1="630" y1="22" x2="920" y2="22" stroke="#0d9488" stroke-width="0.9" opacity="0.18"/>
+    <line x1="420" y1="40" x2="492" y2="40" stroke="#0d9488" stroke-width="1.5" opacity="0.42"/>
+    <line x1="588" y1="40" x2="660" y2="40" stroke="#0d9488" stroke-width="1.5" opacity="0.42"/>
+    <circle cx="540" cy="40" r="8" fill="none" stroke="#0d9488" stroke-width="2" opacity="0.55" class="nd"/>
+    <circle cx="540" cy="40" r="3" fill="#0d9488" opacity="0.7"/>
+    <circle cx="540" cy="40" r="14" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.16" class="nd-2"/>
+    <path d="M 540,32 L 540,22 L 562,22 L 572,12" stroke="#0d9488" stroke-width="1.2" fill="none" opacity="0.32"/>
+    <circle cx="572" cy="12" r="3" fill="#0d9488" opacity="0.42" class="nd"/>
+    <path d="M 540,48 L 540,58 L 518,58 L 508,68" stroke="#0d9488" stroke-width="1.2" fill="none" opacity="0.32"/>
+    <circle cx="508" cy="68" r="3" fill="#0d9488" opacity="0.42" class="nd-3"/>
+    <circle cx="270" cy="40" r="5" fill="none" stroke="#0d9488" stroke-width="1.4" opacity="0.34"/>
+    <circle cx="270" cy="40" r="2" fill="#0d9488" opacity="0.42"/>
+    <line x1="228" y1="40" x2="250" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="290" y1="40" x2="315" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <circle cx="810" cy="40" r="5" fill="none" stroke="#0d9488" stroke-width="1.4" opacity="0.34"/>
+    <circle cx="810" cy="40" r="2" fill="#0d9488" opacity="0.42"/>
+    <line x1="765" y1="40" x2="790" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="830" y1="40" x2="852" y2="40" stroke="#0d9488" stroke-width="1.2" opacity="0.3"/>
+    <line x1="135" y1="36" x2="135" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="135" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="405" y1="36" x2="405" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="405" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="675" y1="36" x2="675" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="675" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="945" y1="36" x2="945" y2="44" stroke="#94a3b8" stroke-width="1" opacity="0.24"/>
+    <circle cx="945" cy="40" r="1.5" fill="#94a3b8" opacity="0.24"/>
+    <line x1="0" y1="40" x2="1080" y2="40" stroke="#0d9488" stroke-width="2" opacity="0.22" stroke-dasharray="100 980" class="fl"/>
+</svg>
+
+<section class="content-section">
+    <div class="wrap">
+        <div class="contact-layout">
+
+            <div class="contact-info">
+                <h2>Why Intrigue8?</h2>
+                <p>We built Intrigue8 to solve a real problem: rural Irish SMEs are losing money and time to admin overhead they don't need to handle manually.</p>
+                <p>We believe contractors and service businesses should focus on their craft. The paperwork should handle itself.</p>
+
+                <div class="card">
+                    <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                        <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                        <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                        <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                        <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                        <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf" opacity="0.55"/>
+                        <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf-2" opacity="0.42"/>
+                        <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf-3" opacity="0.35"/>
+                        <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                        <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                    </svg>
+                    <h3>Email us</h3>
+                    <p style="color:var(--text-3);font-size:13px;margin-bottom:8px">hello@intrigue8.ie</p>
+                    <a href="mailto:hello@intrigue8.ie" class="contact-link">Send an email →</a>
+                    <hr style="border:none;border-top:1px solid var(--border);margin:var(--s3) 0">
+                    <h3 style="margin-bottom:8px">Quick survey</h3>
+                    <p style="color:var(--text-3);font-size:13px;margin-bottom:8px">Have 2 minutes?</p>
+                    <a href="survey.html" class="contact-link">Take the survey →</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <svg class="card-circuit" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M 15,1 L 1,1 L 1,15" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.65"/>
+                    <path d="M 85,99 L 99,99 L 99,85" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <circle cx="1" cy="1" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.6"/>
+                    <circle cx="99" cy="99" r="3" fill="#0d9488" vector-effect="non-scaling-stroke" opacity="0.5"/>
+                    <line x1="17" y1="1" x2="82" y2="1" stroke="#0d9488" stroke-width="2" vector-effect="non-scaling-stroke" stroke-dasharray="20 160" class="cf" opacity="0.55"/>
+                    <line x1="83" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="16 160" class="cf-2" opacity="0.42"/>
+                    <line x1="1" y1="17" x2="1" y2="83" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="13 160" class="cf-3" opacity="0.35"/>
+                    <line x1="82" y1="1" x2="94" y2="1" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.45"/>
+                    <line x1="6" y1="99" x2="18" y2="99" stroke="#0d9488" stroke-width="1.5" vector-effect="non-scaling-stroke" opacity="0.38"/>
+                </svg>
+                <form id="contactForm">
+                    <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:700;color:var(--text-1);margin-bottom:var(--s4)">Send a message</h2>
+                    <div class="form-group">
+                        <label class="form-label" for="contactName">Your name</label>
+                        <input type="text" id="contactName" name="name" placeholder="John O'Connor">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="contactEmail">Email</label>
+                        <input type="email" id="contactEmail" name="email" placeholder="john@business.ie">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="contactMessage">Message</label>
+                        <textarea id="contactMessage" name="message" placeholder="Tell us what's on your mind..."></textarea>
+                    </div>
+                    <button type="submit" id="contactSubmit" class="btn-primary" style="width:100%">Send message</button>
+                    <div id="contactSuccess" style="display:none;margin-top:var(--s3);padding:var(--s3) var(--s4);background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.3);border-radius:8px;color:var(--accent);font-weight:500;text-align:center;">
+                        Message sent — we'll be in touch shortly.
+                    </div>
+                    <div id="contactError" style="display:none;margin-top:var(--s3);padding:var(--s3) var(--s4);background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.25);border-radius:8px;color:#dc2626;font-weight:500;text-align:center;">
+                        Something went wrong. Please email us at hello@intrigue8.ie
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<footer>
+    <svg class="footer-circuit" viewBox="0 0 1080 44" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <line x1="0" y1="2" x2="1080" y2="2" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="0" y1="20" x2="1080" y2="20" stroke="#0d9488" stroke-width="1.5" opacity="0.28"/>
+        <line x1="0" y1="10" x2="380" y2="10" stroke="#0d9488" stroke-width="0.8" opacity="0.15"/>
+        <line x1="700" y1="10" x2="1080" y2="10" stroke="#0d9488" stroke-width="0.8" opacity="0.15"/>
+        <line x1="100" y1="10" x2="100" y2="32" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <circle cx="100" cy="20" r="2.5" fill="#0d9488" opacity="0.38"/>
+        <circle cx="540" cy="20" r="6" fill="none" stroke="#0d9488" stroke-width="1.8" opacity="0.48" class="nd"/>
+        <circle cx="540" cy="20" r="2.5" fill="#0d9488" opacity="0.58"/>
+        <line x1="496" y1="20" x2="520" y2="20" stroke="#0d9488" stroke-width="1.2" opacity="0.38"/>
+        <line x1="560" y1="20" x2="584" y2="20" stroke="#0d9488" stroke-width="1.2" opacity="0.38"/>
+        <circle cx="270" cy="20" r="3.5" fill="none" stroke="#0d9488" stroke-width="1.2" opacity="0.28"/>
+        <circle cx="810" cy="20" r="3.5" fill="none" stroke="#0d9488" stroke-width="1.2" opacity="0.28"/>
+        <line x1="980" y1="10" x2="980" y2="32" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <circle cx="980" cy="20" r="2.5" fill="#0d9488" opacity="0.38"/>
+        <line x1="180" y1="17" x2="180" y2="23" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <line x1="900" y1="17" x2="900" y2="23" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <rect x="3" y="28" width="6" height="6" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <rect x="1071" y="28" width="6" height="6" rx="1.5" fill="none" stroke="#0d9488" stroke-width="1" opacity="0.2"/>
+        <line x1="0" y1="20" x2="1080" y2="20" stroke="#0d9488" stroke-width="1.5" opacity="0.22" stroke-dasharray="80 1000" class="fl-3"/>
+    </svg>
+    <div class="wrap">
+        <p>&copy; 2026 Intrigue8</p>
+        <p>Systems for Irish service businesses.</p>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('contactSubmit');
+        var success = document.getElementById('contactSuccess');
+        var error = document.getElementById('contactError');
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+        fetch('https://formspree.io/f/xkokdzvl', {
+            method: 'POST',
+            body: new FormData(this),
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.ok) {
+                success.style.display = 'block';
+                error.style.display = 'none';
+                document.getElementById('contactForm').reset();
+            } else {
+                error.style.display = 'block';
+            }
+            btn.disabled = false;
+            btn.textContent = 'Send message';
+        })
+        .catch(function() {
+            error.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Send message';
+        });
+    });
+</script>
+
+</body>
+</html>
