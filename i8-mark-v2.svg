@@ -1,0 +1,85 @@
+<svg viewBox="0 0 200 252" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- ── BACKGROUND ── -->
+  <rect width="200" height="252" fill="#f5f4f2"/>
+
+  <!--
+    Intrigue8 — i8 Monogram (v2, geometric ligature)
+
+    Concept: the i's vertical stem IS the left side of the 8.
+    Two D-shaped loops (upper + lower) extend right from the shared stem,
+    forming the 8 while the stem + tittle reads as the i.
+
+    Typography: strokes only, no fills on the letterforms.
+    Weight: 17px, rounded caps.
+    Accent: teal #0d9488 hairline runs along the inner edge of each stroke.
+    Background: warm off-white #f5f4f2.
+  -->
+
+  <!-- ═══════════════════════════════════════════════
+       PRIMARY STROKES  (#1a1a1a, 17px)
+       ═══════════════════════════════════════════════ -->
+
+  <!-- i stem — also serves as the flat left edge of both 8-loops -->
+  <line
+    x1="70" y1="62"
+    x2="70" y2="222"
+    stroke="#1a1a1a" stroke-width="17" stroke-linecap="round"/>
+
+  <!-- 8 upper loop  — D-curve from stem, sweeping right and returning -->
+  <!-- Starts at top of loop on the stem (y=70), peaks right ≈ x=152, returns to stem (y=132) -->
+  <path
+    d="M 70 70
+       C 124 63, 156 80, 156 100
+       C 156 120, 124 137, 70 132"
+    stroke="#1a1a1a" stroke-width="17"
+    stroke-linecap="round" fill="none"/>
+
+  <!-- 8 lower loop  — slightly wider/taller than upper (correct 8 proportions) -->
+  <!-- Starts at y=132 (shared junction with upper loop), peaks right ≈ x=160, returns at y=222 -->
+  <path
+    d="M 70 132
+       C 124 127, 160 152, 160 178
+       C 160 204, 124 220, 70 222"
+    stroke="#1a1a1a" stroke-width="17"
+    stroke-linecap="round" fill="none"/>
+
+
+  <!-- ═══════════════════════════════════════════════
+       TEAL ACCENT HAIRLINES  (#0d9488, 1.5px)
+       Same paths — sit along the centre of each stroke.
+       ═══════════════════════════════════════════════ -->
+
+  <line
+    x1="70" y1="62"
+    x2="70" y2="222"
+    stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
+
+  <path
+    d="M 70 70
+       C 124 63, 156 80, 156 100
+       C 156 120, 124 137, 70 132"
+    stroke="#0d9488" stroke-width="1.5"
+    stroke-linecap="round" fill="none"/>
+
+  <path
+    d="M 70 132
+       C 124 127, 160 152, 160 178
+       C 160 204, 124 220, 70 222"
+    stroke="#0d9488" stroke-width="1.5"
+    stroke-linecap="round" fill="none"/>
+
+
+  <!-- ═══════════════════════════════════════════════
+       i TITTLE  (dot above the stem)
+       Filled disc + inner teal ring.
+       ═══════════════════════════════════════════════ -->
+
+  <!-- Filled black disc -->
+  <circle cx="70" cy="33" r="11" fill="#1a1a1a"/>
+
+  <!-- Teal accent ring inside disc -->
+  <circle cx="70" cy="33" r="6.5"
+    stroke="#0d9488" stroke-width="1.5" fill="none"/>
+
+</svg>

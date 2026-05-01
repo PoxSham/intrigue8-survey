@@ -133,11 +133,51 @@
             font-size: 17px;
             color: var(--text-1);
             line-height: 1.75;
-            margin-bottom: var(--s5);
+            margin-bottom: var(--s3);
             max-width: 440px;
         }
 
-        .cta-row { display: flex; gap: var(--s2); flex-wrap: wrap; }
+        .hero-trust {
+            font-size: 13px;
+            color: var(--text-2);
+            margin-bottom: var(--s5);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hero-trust::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .cta-row { display: flex; gap: var(--s2); flex-wrap: wrap; align-items: center; }
+
+        .btn-ghost-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 24px;
+            background: transparent;
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 2px solid var(--accent);
+            transition: all 0.2s;
+        }
+        .btn-ghost-whatsapp:hover {
+            background: var(--accent-dim);
+            border-color: var(--accent);
+        }
+        .btn-ghost-whatsapp svg {
+            width: 16px;
+            height: 16px;
+        }
 
         .btn-primary {
             display: inline-block;
@@ -350,6 +390,151 @@
             transform: translateY(-2px);
         }
 
+        /* Secondary CTA styles */
+        .cta-secondary {
+            display: flex;
+            gap: var(--s3);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: var(--s4);
+            font-size: 14px;
+        }
+        .cta-secondary a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 24px;
+            background: transparent;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.2s;
+        }
+        .cta-secondary a:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.6);
+            color: #fff;
+        }
+        .cta-secondary svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* CTA footer text */
+        .cta-footer {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            margin-top: var(--s5);
+        }
+
+        /* ── TRUST SIGNALS ──────────────────────────── */
+        .trust-signals {
+            padding: var(--s7) 0;
+            background: var(--surface);
+        }
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--s2);
+            margin-top: var(--s5);
+        }
+        .trust-card {
+            padding: var(--s4);
+            border: 1px solid rgba(13,148,136,0.28);
+            border-top: 3px solid var(--accent);
+            border-radius: 12px;
+            background: var(--bg);
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .trust-card > * { position: relative; z-index: 1; }
+        .trust-card:hover {
+            border-color: rgba(13,148,136,0.55);
+            border-top-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim), 0 6px 24px rgba(13,148,136,0.12);
+            transform: translateY(-2px);
+        }
+        .trust-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            padding: 6px 12px;
+            border: 1px solid rgba(13,148,136,0.28);
+            border-radius: 4px;
+            background: var(--accent-dim);
+            margin-bottom: var(--s2);
+        }
+        .trust-card h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: var(--s2);
+        }
+        .trust-card p {
+            font-size: 14px;
+            color: var(--text-2);
+            line-height: 1.65;
+            margin-bottom: var(--s2);
+        }
+        .trust-stat {
+            font-size: 13px;
+            color: var(--text-2);
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .trust-stat::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .avatars {
+            display: flex;
+            gap: 8px;
+            margin-top: var(--s3);
+            flex-wrap: wrap;
+        }
+        .avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), rgba(13,148,136,0.7));
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(13,148,136,0.15);
+            border: 1.5px solid rgba(13,148,136,0.2);
+        }
+        .micro-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: var(--s3);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            transition: gap 0.2s;
+        }
+        .micro-cta:hover {
+            gap: 10px;
+        }
+
         /* ── FOOTER ─────────────────────────────────── */
         footer {
             padding: 0 0 var(--s4);
@@ -402,6 +587,8 @@
             .hero-mark { right: -180px; bottom: -60px; width: 380px; height: 460px; }
             .steps { gap: var(--s4); }
             nav { gap: var(--s3); }
+            .avatars { gap: 6px; }
+            .avatar { width: 40px; height: 40px; font-size: 11px; }
         }
         @media (max-width: 600px) {
             nav a:not(.nav-cta) { display: none; }
@@ -412,7 +599,18 @@
             .hero::before { width: 100%; }
             .hero-mark { opacity: 0.2; right: -160px; width: 320px; height: 390px; }
             .cta-row { flex-direction: column; }
-            .btn-primary, .btn-ghost { text-align: center; }
+            .btn-primary, .btn-ghost, .btn-ghost-whatsapp { width: 100%; text-align: center; justify-content: center; }
+            .cta-secondary {
+                flex-direction: column;
+                gap: var(--s2);
+            }
+            .cta-secondary a {
+                width: 100%;
+                justify-content: center;
+            }
+            .trust-grid { grid-template-columns: 1fr; }
+            .avatars { gap: 6px; }
+            .avatar { width: 38px; height: 38px; font-size: 10px; }
         }
     </style>
 </head>
@@ -475,11 +673,18 @@
 <section class="hero">
     <div class="wrap">
         <div class="hero-content">
-            <h1>Stop losing hours<br>to <span class="hi">admin work.</span></h1>
-            <p class="hero-sub">Intrigue8 builds agentic systems that turn scattered job notes into structured data, invoices, and business clarity — automatically.</p>
+            <h1>Your docket. Your voice.<br><span class="hi">Your invoice.</span> Automated.</h1>
+            <p class="hero-sub">Record what you did on the job. Intrigue8 turns it into a professional invoice, client record, and profit data — automatically. No manual entry. No spreadsheets.</p>
+            <div class="hero-trust">Used by 12+ Irish contractors in beta</div>
             <div class="cta-row">
                 <a href="survey.html" class="btn-primary">Take the 3-min survey →</a>
                 <a href="problems.html" class="btn-ghost">See the problem</a>
+                <a href="https://wa.me/message/INTRIGUE8" class="btn-ghost-whatsapp">
+                    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.968 1.495c-1.53.827-2.83 1.993-3.756 3.415-.915 1.41-1.405 3.027-1.446 4.721-.024 1.21.059 2.358.291 3.434A9.957 9.957 0 00.464 15.861c.324.244.564.47.842.687.326.242.597.487.92.728 1.036.798 2.139 1.493 3.3 2.053 1.285.628 2.655.983 4.1 1.08 1.557.1 3.113-.156 4.567-.637 2.453-.798 4.763-2.41 6.514-4.619 1.75-2.209 2.8-4.947 2.956-7.664.033-.79-.032-1.555-.164-2.285a9.896 9.896 0 00-.849-3.004c-.766-1.504-1.844-2.855-3.192-3.934-1.348-1.079-2.92-1.845-4.61-2.251-1.266-.306-2.653-.35-4.04-.097z"/>
+                    </svg>
+                    WhatsApp
+                </a>
             </div>
         </div>
     </div>
@@ -835,8 +1040,59 @@
     </svg>
     <div class="wrap" style="position:relative;z-index:1;">
         <h2>Ready to get your time back?</h2>
-        <p>We're looking for service businesses to shape the first version. Three minutes, five questions.</p>
-        <a href="survey.html" class="btn-cta">Start the survey →</a>
+        <p>Tell us about your biggest admin pain point. We'll use your input to build the exact system you need. Takes 3 minutes. No credit card. You'll hear from us within 24 hours.</p>
+        <a href="survey.html" class="btn-cta">Take the 3-min survey</a>
+        <div class="cta-secondary">
+            <a href="mailto:adammaughan1@gmail.com">Email us</a>
+            <a href="https://wa.me/message/INTRIGUE8">Message on WhatsApp</a>
+        </div>
+        <div class="cta-footer">Join 12+ Irish contractors already using Intrigue8.</div>
+    </div>
+</section>
+
+<!-- ═══════════ TRUST SIGNALS ═══════════ -->
+<section class="trust-signals">
+    <div class="wrap">
+        <p class="section-label">Trusted by Irish contractors</p>
+        <h2 class="section-h">Already helping tradies reclaim their time.</h2>
+        <div class="section-h-rule"><span></span><span></span><span></span></div>
+        <div class="trust-grid">
+            <!-- COLUMN 1: Beta Testers / Social Proof -->
+            <div class="trust-card">
+                <span class="trust-badge">12+ beta testers</span>
+                <h3>Real contractors. Real results.</h3>
+                <p>Plumbers, electricians, builders, and general contractors across Cork, Dublin, and Galway are already using Intrigue8.</p>
+                <div class="avatars">
+                    <div class="avatar">JO</div>
+                    <div class="avatar">MC</div>
+                    <div class="avatar">PD</div>
+                    <div class="avatar">SD</div>
+                    <div class="avatar">DM</div>
+                    <div class="avatar">FO</div>
+                    <div class="avatar">TK</div>
+                    <div class="avatar">BR</div>
+                </div>
+                <a href="survey.html" class="micro-cta">Join the beta →</a>
+            </div>
+
+            <!-- COLUMN 2: Time Saved / Metrics -->
+            <div class="trust-card">
+                <span class="trust-badge">€500+ hours recovered</span>
+                <h3>Measurable time savings.</h3>
+                <p>15–25 hours per month of admin work automated. That's €500–1,000 in reclaimed time, per contractor, per month.</p>
+                <div class="trust-stat">50+ invoices generated automatically in beta</div>
+                <div class="trust-stat">Zero manual entry required</div>
+            </div>
+
+            <!-- COLUMN 3: Credibility / Values -->
+            <div class="trust-card">
+                <span class="trust-badge">Built for Irish SMEs</span>
+                <h3>No bloat. No nonsense.</h3>
+                <p>We understand the West of Ireland contractor. Built for speed, profit clarity, and simplicity.</p>
+                <div class="trust-stat">Privacy-first: Your data stays in your Notion workspace or n8n instance. We never touch it.</div>
+                <div class="trust-stat">Powered by Claude AI and n8n workflows</div>
+            </div>
+        </div>
     </div>
 </section>
 

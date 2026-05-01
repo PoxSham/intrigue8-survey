@@ -157,9 +157,9 @@
 
 <section class="page-hero">
     <div class="wrap">
-        <div class="section-label">Validation survey</div>
-        <h1>Shape what we build.</h1>
-        <p>Three minutes, five questions. Your input directly influences what we prioritise.</p>
+        <div class="section-label">Quick research survey</div>
+        <h1>2 minutes, 5 questions.</h1>
+        <p>We're Intrigue8, based in the West of Ireland. We're trying to understand how trade contractors here handle the paperwork side of the job — before deciding if there's anything worth building. No product, no pitch. Just trying to learn.</p>
     </div>
 </section>
 
@@ -215,139 +215,141 @@
 
             <!-- Q1 -->
             <div class="q-group">
-                <span class="q-label">What's your primary business? *</span>
+                <span class="q-label">What type of work do you do? *</span>
                 <div class="options">
                     <label class="option-row">
-                        <input type="radio" name="businessType" value="contractor" required>
-                        <span>Contractor or tradesperson</span>
+                        <input type="radio" name="tradeType" value="plumbing" required>
+                        <span>Plumbing / heating</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="businessType" value="service">
-                        <span>Service provider (plumbing, electrical, etc.)</span>
+                        <input type="radio" name="tradeType" value="electrical">
+                        <span>Electrical</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="businessType" value="team">
-                        <span>Small team or agency</span>
+                        <input type="radio" name="tradeType" value="building">
+                        <span>Building / construction</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="businessType" value="other">
-                        <span>Other</span>
+                        <input type="radio" name="tradeType" value="painting">
+                        <span>Painting / decorating</span>
+                    </label>
+                    <label class="option-row">
+                        <input type="radio" name="tradeType" value="other">
+                        <span>Other trade</span>
                     </label>
                 </div>
             </div>
 
             <!-- Q2 -->
             <div class="q-group">
-                <span class="q-label">How do you currently manage invoices? *</span>
+                <span class="q-label">When a job's done and you're paid — do you know if it actually made you money? *</span>
                 <div class="options">
                     <label class="option-row">
-                        <input type="radio" name="currentSystem" value="manual" required>
-                        <span>Manual (paper, email, spreadsheets)</span>
+                        <input type="radio" name="jobCosting" value="tracked" required>
+                        <span>Yeah — I keep track of costs as I go</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="currentSystem" value="excel">
-                        <span>Excel or similar spreadsheet</span>
+                        <input type="radio" name="jobCosting" value="rough">
+                        <span>Mostly — I have a rough feel but nothing written down</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="currentSystem" value="software">
-                        <span>Basic accounting software</span>
+                        <input type="radio" name="jobCosting" value="feel">
+                        <span>I go by feel — if cash is in the account it was grand</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="currentSystem" value="complete">
-                        <span>Full accounting system (Xero, FreeAgent, etc.)</span>
+                        <input type="radio" name="jobCosting" value="no">
+                        <span>Honestly, I wouldn't really know</span>
                     </label>
                 </div>
             </div>
 
             <!-- Q3 -->
             <div class="q-group">
-                <span class="q-label">How frustrated are you with current admin work? *</span>
+                <span class="q-label">When a job's done, how does the customer usually find out what they owe you? *</span>
                 <div class="options">
                     <label class="option-row">
-                        <input type="radio" name="frustration" value="low" required>
-                        <span>Not very — it's under control</span>
+                        <input type="radio" name="customerComms" value="whatsapp" required>
+                        <span>I send them something on WhatsApp or text</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="frustration" value="medium">
-                        <span>Moderately — it takes too much time</span>
+                        <input type="radio" name="customerComms" value="email">
+                        <span>I email them a document</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="frustration" value="high">
-                        <span>Very — it's eating my time and profits</span>
+                        <input type="radio" name="customerComms" value="docket">
+                        <span>I hand them a docket or receipt on the day</span>
+                    </label>
+                    <label class="option-row">
+                        <input type="radio" name="customerComms" value="reactive">
+                        <span>They ask me, or I get around to it when I can</span>
                     </label>
                 </div>
             </div>
 
             <!-- Q4 -->
             <div class="q-group">
-                <span class="q-label">How many hours per week on admin? *</span>
+                <span class="q-label">Outside of the actual work, what causes you the most hassle? *</span>
                 <div class="options">
                     <label class="option-row">
-                        <input type="radio" name="adminHours" value="few" required>
-                        <span>Less than 5 hours</span>
+                        <input type="radio" name="biggestHassle" value="tracking-owed" required>
+                        <span>Keeping track of what people owe me</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="adminHours" value="moderate">
-                        <span>5–15 hours</span>
+                        <input type="radio" name="biggestHassle" value="materials-receipts">
+                        <span>Sorting materials costs and receipts</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="adminHours" value="significant">
-                        <span>15+ hours</span>
+                        <input type="radio" name="biggestHassle" value="chasing">
+                        <span>Chasing slow-paying customers</span>
+                    </label>
+                    <label class="option-row">
+                        <input type="radio" name="biggestHassle" value="no-hassle">
+                        <span>Not much — I have it fairly well sorted</span>
                     </label>
                 </div>
             </div>
 
             <!-- Q5 -->
             <div class="q-group">
-                <span class="q-label">Interest in a system that automates this? *</span>
+                <span class="q-label">If you could send a voice note after each job and get back a record of the job, what you're owed, and a weekly summary — all through WhatsApp, no app — would that suit you? *</span>
                 <div class="options">
                     <label class="option-row">
-                        <input type="radio" name="interest" value="yes" required>
-                        <span>Yes — absolutely</span>
+                        <input type="radio" name="whatsappFit" value="yes" required>
+                        <span>Yeah, that's exactly how I'd want it</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="interest" value="maybe">
-                        <span>Maybe — depends on price &amp; fit</span>
+                        <input type="radio" name="whatsappFit" value="maybe">
+                        <span>Maybe — I'd want to try it first</span>
                     </label>
                     <label class="option-row">
-                        <input type="radio" name="interest" value="no">
-                        <span>No — not interested</span>
+                        <input type="radio" name="whatsappFit" value="different">
+                        <span>Probably not — I'd want something different</span>
+                    </label>
+                    <label class="option-row">
+                        <input type="radio" name="whatsappFit" value="no">
+                        <span>No, not for me</span>
                     </label>
                 </div>
             </div>
 
-            <!-- Conditional contact section -->
-            <div id="contactSection" class="conditional-section">
-                <div class="conditional-title">Let's stay in touch</div>
+            <!-- Contact section — always visible -->
+            <div class="conditional-section show">
+                <div class="conditional-title">Stay in the loop</div>
                 <div class="form-group">
                     <label class="form-label" for="name">Your name *</label>
-                    <input type="text" id="name" name="name" placeholder="John O'Connor">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="business">Business name *</label>
-                    <input type="text" id="business" name="business" placeholder="Your business">
+                    <input type="text" id="name" name="name" placeholder="John O'Brien" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="email">Email *</label>
-                    <input type="email" id="email" name="email" placeholder="john@business.ie">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="phone">Phone (optional)</label>
-                    <input type="tel" id="phone" name="phone" placeholder="+353 87 123 4567">
+                    <input type="email" id="email" name="email" placeholder="john@business.ie" required>
                 </div>
             </div>
 
-            <!-- Comments -->
-            <div class="form-group">
-                <label class="form-label" for="comments">Any other thoughts? (optional)</label>
-                <textarea id="comments" name="comments" placeholder="What's your biggest pain point with admin work right now?"></textarea>
-            </div>
-
-            <button type="submit" class="btn-primary" style="width:100%;margin-top:var(--s2)">Submit survey</button>
+            <button type="submit" class="btn-primary" style="width:100%;margin-top:var(--s2)">Send my answers</button>
 
             <div class="success-msg" id="successMessage">
-                <h3>Thank you!</h3>
-                <p>We'll review your responses and follow up within 24 hours.</p>
+                <h3>Thanks — got it.</h3>
+                <p>If you said yes to a call, I'll be in touch shortly.</p>
             </div>
 
         </form>
@@ -383,54 +385,33 @@
 </footer>
 
 <script>
-    const form = document.getElementById('surveyForm');
-    const contactSection = document.getElementById('contactSection');
-    const interestRadios = document.querySelectorAll('input[name="interest"]');
-    const nameInput = document.getElementById('name');
-    const businessInput = document.getElementById('business');
-    const emailInput = document.getElementById('email');
-    const successMessage = document.getElementById('successMessage');
-
-    interestRadios.forEach(function(radio) {
-        radio.addEventListener('change', function() {
-            if (this.value === 'yes' || this.value === 'maybe') {
-                contactSection.classList.add('show');
-                nameInput.required = true;
-                businessInput.required = true;
-                emailInput.required = true;
-            } else {
-                contactSection.classList.remove('show');
-                nameInput.required = false;
-                businessInput.required = false;
-                emailInput.required = false;
-            }
-        });
-    });
+    var form = document.getElementById('surveyForm');
+    var successMessage = document.getElementById('successMessage');
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         var btn = form.querySelector('button[type="submit"]');
         btn.disabled = true;
         btn.textContent = 'Submitting…';
-        fetch('https://formspree.io/f/xvzdeqbe', {
+        fetch('https://formsubmit.co/ajax/intrigue8ireland@gmail.com', {
             method: 'POST',
             body: new FormData(form),
             headers: { 'Accept': 'application/json' }
         })
         .then(function(res) { return res.json(); })
         .then(function(data) {
-            if (data.ok) {
+            if (data.success === 'true' || data.success === true) {
                 form.style.display = 'none';
                 successMessage.classList.add('show');
             } else {
                 btn.disabled = false;
-                btn.textContent = 'Submit survey';
+                btn.textContent = 'Submit';
                 alert('Something went wrong. Please try again.');
             }
         })
         .catch(function() {
             btn.disabled = false;
-            btn.textContent = 'Submit survey';
+            btn.textContent = 'Submit';
             alert('Something went wrong. Please try again.');
         });
     });
