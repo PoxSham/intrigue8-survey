@@ -203,7 +203,186 @@ The contractor-facing Notion record additionally shows: cost subtotal, margin am
 
 ---
 
-## Add-On 2: Invoice Delivery + Payment Links — PENDING DESIGN
+## Add-On 2: Invoice Delivery + Payment Links — LOCKED
+
+### Overview
+
+When `invoice_trigger` fires, the system generates a professional PDF invoice, creates a Stripe payment link, and delivers both to the client directly (Mode A) or via the contractor for forwarding (Mode C). Cash and bank transfer are supported alongside Stripe. Payment confirmation auto-triggers `payment_received`.
+
+### Two Delivery Modes
+
+**Mode A — Direct to client** (default when client contact is on file):
+```
+invoice_trigger fires → Invoice created in Notion
+→ Pull labour + cost rollups → Generate PDF
+→ Create Stripe payment link
+→ Send PDF + link to client WhatsApp or email
+→ Contractor confirmed: "Invoice INV-007 sent to Mrs Murphy — €2,503 due"
+→ Client pays → Stripe webhook → n8n → payment_received auto-triggered
+→ Invoice status: Paid → Contractor + client notified
+```
+
+**Mode C — Via contractor** (no client contact on file, or contractor requests it):
+```
+invoice_trigger fires → Invoice created in Notion
+→ Generate PDF → Create Stripe payment link
+→ Send PDF + link to contractor's WhatsApp:
+  "Here's Mrs Murphy's invoice INV-007 for €2,503. Forward this to her."
+→ Contractor forwards manually
+→ Same Stripe webhook flow when paid
+```
+
+Contractor triggers Mode C by saying: *"Invoice Murphy — send it to me"* or *"Invoice Murphy — I'll forward it."*
+If client contact is missing, system falls back to Mode C automatically and tells the contractor why.
+
+### Mandatory Client Contact on `job_setup`
+
+Client phone or email must be captured when creating a customer. Claude flags if missing:
+> *"New job created for Mrs Murphy — MRP-SHA-02. I don't have her phone or email. Add it now or I'll ask again when you invoice her."*
+
+**Updated `job_setup` intent fields:**
+```json
+{
+  "client_phone": "+353851234567",
+  "client_email": "murphy@example.com"
+}
+```
+At least one is required. Both stored in the Customers database.
+
+### Payment Methods Supported
+
+| Method | How triggered |
+|--------|--------------|
+| Stripe (card) | Client taps payment link — webhook auto-triggers `payment_received` |
+| Bank transfer (SEPA) | Contractor logs manually via voice: "Murphy paid by transfer" |
+| Cash | Contractor logs via voice: "Murphy paid cash" |
+| Cheque | Contractor logs via voice: "Murphy paid by cheque" |
+
+Cash is the default assumption when a contractor logs payment manually — if they're logging it, it wasn't Stripe.
+
+### `payment_received` Intent — Updated
+
+```json
+{
+  "type": "payment_received",
+  "customer_name": "Murphy",
+  "address_hint": "Shantalla",
+  "amount": 2503.00,
+  "date": "2026-05-02",
+  "payment_method": "cash",
+  "notes": "paid on site"
+}
+```
+`payment_method` values: `"cash"` | `"stripe"` | `"bank_transfer"` | `"cheque"`
+
+### Cash Receipt Flow
+
+When `payment_method == "cash"`:
+- System generates a simple cash receipt PDF
+- Sends to contractor's WhatsApp: *"Here's Mrs Murphy's cash receipt for €2,503 — forward to her if needed."*
+- Contractor forwards on site or keeps for records
+- Cash income logged to VAT/RCT summary (Add-on 4) with timestamp and audit trail
+
+### Quote-to-Invoice Continuity
+
+If the job originated from a Quote (Add-on 1) with a deposit already paid:
+- Invoice pulls deposit amount from linked Quote record
+- PDF shows: Total: €2,503 / Deposit paid: (€1,251) / Balance due: €1,252
+- Stripe payment link is generated for balance due only, not full amount
+- Balance due field on Invoice = Invoice Total − Amount Already Paid
+
+### New Notion Fields
+
+**Invoices database additions:**
+
+| Field | Type | Notes |
+|-------|------|-------|
+| PDF URL | URL | Generated invoice PDF |
+| Stripe Payment Link | URL | Unique per invoice — for balance due |
+| Stripe Payment ID | Text | For webhook reconciliation |
+| Delivery Mode | Select | Direct / Via Contractor |
+| Sent To | Text | Client phone or email used |
+| Sent Date | Date | When PDF + link dispatched |
+| Due Date | Date | Sent date + payment terms (e.g. +14 days) — trigger for Add-on 3 |
+| Paid Date | Date | Set by Stripe webhook or manual log |
+| Payment Method | Select | Cash / Stripe / Bank Transfer / Cheque |
+| Cash Receipt Sent | Checkbox | Logged when cash receipt generated |
+
+**Customer database additions:**
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Phone | Text | E.164 — for WhatsApp delivery |
+| Email | Text | Fallback if no WhatsApp |
+
+**Client Mapping table additions (contractor profile):**
+
+| Field | Type | Notes |
+|-------|------|-------|
+| IBAN | Text | For bank transfer details on invoice |
+| BIC | Text | |
+| Stripe Account ID | Text | Set during Stripe Connect onboarding |
+
+### Invoice PDF Structure (Client-Facing)
+
+1. **Header** — contractor name, logo, address, VAT number, reg number (RECI/RGII/SEAI)
+2. **Invoice reference + date + due date**
+3. **Client details** — name, address, phone, email
+4. **Job reference** — job code, description
+5. **Line items** — labour (hours × rate), materials (itemised from Costs), subtotals
+6. **Pricing summary** — subtotal ex-VAT, VAT @ 13.5%, total inc VAT
+7. **Deposit already paid** (if applicable — from Quote)
+8. **Balance due** — prominently displayed
+9. **Payment options:**
+   - Stripe: "Pay securely online: [link]"
+   - Bank transfer: IBAN, BIC, payment reference (INV-007)
+   - Cash: "Cash accepted — request a receipt on payment"
+10. **Payment terms** — due date, late payment notice
+11. **Thank you note**
+
+### Partial Payment Handling
+
+Stripe webhook fires for any payment amount. If amount < balance due:
+- Amount Paid updated in Notion
+- Invoice status → Part Paid
+- Contractor notified: *"Mrs Murphy paid €1,000 of €2,503 — €1,503 still outstanding."*
+- Add-on 3 (payment chasing) continues to chase the remaining balance
+
+### On Full Payment
+
+- Invoice status → Paid, Paid Date set
+- Contractor notified: *"Mrs Murphy paid €2,503 in full — INV-007 closed."*
+- Client receives WhatsApp/email: *"Payment received — thank you, Mrs Murphy."*
+- Add-on 3 chasing stops automatically
+
+### Stripe Architecture
+
+- **Stripe Connect** — each contractor onboards their own Stripe account; money goes directly to contractor, never through Intrigue8
+- **One-time setup** — contractor provides Stripe credentials during onboarding; stored in Client Mapping table
+- **Fees** — Stripe charges ~1.5% + €0.25 per EU card transaction; absorbed by contractor or noted on invoice
+
+### Add-on 3 Handoff
+
+`Due Date` is written to the Invoice record when the invoice is sent. Add-on 3 reads this field to know when to begin chasing. No additional trigger needed.
+
+### n8n Nodes Required
+
+- Extend existing `invoice_trigger` handler
+- HTTP Request → PDF generation service
+- HTTP Request → Stripe API (create payment link for balance due)
+- Twilio send — PDF + link to client (Mode A) or contractor (Mode C)
+- Cash receipt PDF generation + Twilio send (when payment_method == cash)
+- New webhook receiver — Stripe payment confirmation (full and partial)
+- Auto-trigger `payment_received` intent on Stripe webhook
+- Notion update — Invoice status, paid date, payment method, Stripe fields
+- New intent handler: `invoice_resend` — re-fires PDF + link to same contact
+
+### Error Handling
+
+- PDF generation failure → retry × 2 → notify Intrigue8
+- Stripe link creation failure → retry × 2 → fall back to Mode C with bank transfer details only
+- Client WhatsApp delivery failure → fallback to email
+- Stripe webhook duplicate → idempotency check on Stripe Payment ID before updating Notion
 
 ---
 
