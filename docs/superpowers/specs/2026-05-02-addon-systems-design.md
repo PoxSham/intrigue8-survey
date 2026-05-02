@@ -2,8 +2,8 @@
 
 **Date:** 2026-05-02
 **Project:** Intrigue8 — Voice-to-Invoice
-**Status:** In progress — Add-on 1 locked, Add-ons 2–4 pending
-**Stack:** n8n · Claude API · Notion · Twilio · Stripe · PDF generation
+**Status:** All 4 add-ons locked — ready for implementation planning
+**Stack:** n8n · Claude API · Notion · Twilio · Stripe · PDF.co · PostGrid · SendGrid
 
 ---
 
@@ -52,8 +52,8 @@ Voice/WhatsApp → Normalise → Client Lookup → Transcribe → Claude Extract
 → quote_request intent
 → Lookup/Create Customer in Notion
 → Create Quote record in Notion (Quotes database)
-→ Generate PDF (contractor-branded, professional layout)
-→ Send PDF to client via Twilio WhatsApp or email
+→ Generate PDF via PDF.co (contractor-branded, professional layout)
+→ Send PDF to client via email (primary) or contractor WhatsApp for forwarding (fallback)
 → Contractor confirmation: "Quote QUO-004 sent to Mrs Murphy — €2,503 total"
 → Client acceptance → webhook → Quote status: Accepted → Job auto-created
 ```
@@ -189,8 +189,9 @@ The contractor-facing Notion record additionally shows: cost subtotal, margin am
 ### n8n Nodes Required
 
 - New Switch branch: `quote_request` intent handler
-- HTTP Request → PDF generation service (PDF.co or equivalent)
-- Twilio send (WhatsApp or SMS) — quote PDF as attachment
+- HTTP Request → PDF.co API — generate quote PDF
+- SendGrid email send — quote PDF to client (primary)
+- Twilio WhatsApp — send to contractor for forwarding (fallback / Mode C)
 - Notion create Quote record
 - Webhook receiver for acceptance link
 - Sub-workflow: Quote accepted → Create Job
@@ -368,9 +369,10 @@ Stripe webhook fires for any payment amount. If amount < balance due:
 ### n8n Nodes Required
 
 - Extend existing `invoice_trigger` handler
-- HTTP Request → PDF generation service
+- HTTP Request → PDF.co API — generate invoice PDF
 - HTTP Request → Stripe API (create payment link for balance due)
-- Twilio send — PDF + link to client (Mode A) or contractor (Mode C)
+- SendGrid email send — PDF + link to client (Mode A)
+- Twilio WhatsApp — PDF + link to contractor for forwarding (Mode C)
 - Cash receipt PDF generation + Twilio send (when payment_method == cash)
 - New webhook receiver — Stripe payment confirmation (full and partial)
 - Auto-trigger `payment_received` intent on Stripe webhook
@@ -512,7 +514,7 @@ Yours faithfully,
 
 ### Postal Mail Integration
 
-**Provider:** PostGrid or Lob (both cover Ireland, both have REST APIs)
+**Provider:** PostGrid (covers Ireland, REST API, supports recorded delivery)
 
 **Flow:**
 ```
@@ -902,4 +904,6 @@ For builders and general contractors who hire subcontractors: they become princi
 
 ---
 
-*Spec continues as each add-on design is approved.*
+---
+
+*All four add-ons fully designed and locked. Next step: implementation planning via writing-plans skill.*
