@@ -386,7 +386,237 @@ Stripe webhook fires for any payment amount. If amount < balance due:
 
 ---
 
-## Add-On 3: Automated Payment Chasing — PENDING DESIGN
+## Add-On 3: Automated Payment Chasing — LOCKED
+
+### Overview
+
+When an invoice goes unpaid past its due date, the system automatically chases the client through a structured escalation sequence — email, then physical posted letters, then recorded delivery final demand. Every step is timestamped and logged, building a documented legal paper trail. If the debt ever goes to the Small Claims Court or beyond, the contractor has full evidence of every contact attempt, the dates they were made, and proof of delivery.
+
+### Selling Point: Built-In Debt Recovery Insurance
+
+This is not just a reminder system. It is a documented evidence trail — every email sent, every letter posted, every recorded delivery receipt — all timestamped and stored in Notion. If a client refuses to pay and the matter goes to:
+
+- **Small Claims Court** (up to €2,000) — the chase log is the evidence file
+- **District Court** — formal letters of demand with proof of delivery satisfy the legal requirement to demonstrate reasonable attempts to recover payment
+- **Debt collection agency** — a complete chase log with dates and delivery confirmations significantly strengthens the case and reduces agency fees
+
+The system effectively replaces a solicitor's letter for the first four stages of debt recovery, at a cost of €4–6 in postage versus €150–300 for a solicitor's letter. For a contractor owed €2,500, that is the difference between writing the debt off and recovering it.
+
+---
+
+### How It Works
+
+When Add-on 2 writes a `Due Date` to an Invoice record, the chasing schedule starts. n8n runs a daily check at 8am.
+
+```
+Daily 8am check → find all invoices where:
+  Status = Sent OR Part Paid
+  AND Due Date has passed
+  AND Chase Enabled = true
+  AND Chase Paused = false
+
+For each overdue invoice → check Chase Stage → send next message
+→ Log chase sent → update Chase Stage, Last Chased Date, Next Chase Date
+→ If status = Paid → stop all chasing automatically
+```
+
+---
+
+### Chase Schedule
+
+| Stage | Trigger | Channel | Tone | Cost |
+|-------|---------|---------|------|------|
+| Reminder 1 | Due + 1 day | Email | Friendly — "just a reminder" | — |
+| Reminder 2 | Due + 7 days | Email | Neutral — "this remains outstanding" | — |
+| Reminder 3 | Due + 14 days | Email + Posted letter | Firm — "please arrange payment this week" | ~€2 |
+| Reminder 4 | Due + 21 days | Email + Posted letter | Formal demand — specific deadline stated | ~€2 |
+| Final notice | Due + 30 days | Email + Recorded post | Final — legal language, 7-day ultimatum | ~€4 |
+| Escalation alert | Due + 37 days | Contractor WhatsApp only | No further automated contact — contractor decides next step | — |
+
+After the escalation alert, automated client contact stops. The contractor has a complete documented trail and can choose to: call the client directly, engage a debt collector, or file a Small Claims Court application.
+
+---
+
+### Message Templates
+
+**Reminder 1 — Email (friendly):**
+> Subject: Invoice INV-007 — Friendly Reminder
+>
+> Hi [Client Name],
+>
+> Just a friendly reminder that invoice INV-007 from [Contractor Name] for €[amount] was due yesterday.
+>
+> You can pay securely online: [Stripe link]
+> Or by bank transfer: IBAN [IBAN] / Ref: INV-007
+>
+> If you've already made payment, many thanks — please ignore this message.
+>
+> [Contractor Name] | [Phone]
+
+**Reminder 3 — Posted letter (firm):**
+```
+[Contractor letterhead — name, address, VAT no, reg no]
+[Date]                                    [Reference: INV-007]
+
+Re: Outstanding Invoice — €[amount]
+
+Dear [Client Name],
+
+We write regarding invoice INV-007 dated [invoice date] for works
+completed at [site address], which remains unpaid and is now 14 days
+overdue.
+
+We ask that you arrange payment of €[balance due] within 7 days.
+
+Payment options:
+  Online: [Stripe link]
+  Bank transfer: IBAN [IBAN] / BIC [BIC] / Ref: INV-007
+  Cash: Please contact us to arrange
+
+If you have already made payment, please accept our thanks and
+disregard this letter.
+
+Yours sincerely,
+[Contractor Name]
+[Phone] | [Email]
+```
+
+**Final notice — Recorded post (legal language):**
+```
+[Contractor letterhead]
+[Date]                          NOTICE OF FINAL DEMAND
+
+Re: Debt Recovery — Invoice INV-007 — €[amount]
+
+Dear [Client Name],
+
+This is a formal final demand for payment of €[amount] outstanding
+under invoice INV-007 dated [date] for works at [address].
+
+Despite previous correspondence dated [dates of prior letters],
+this invoice remains unpaid [X] days after the due date.
+
+You are required to make payment in full within 7 days of this
+letter. Failure to do so will result in this matter being referred
+for formal debt recovery proceedings, which may result in additional
+costs being sought against you.
+
+Payment: [Stripe link] / IBAN [IBAN] / Ref: INV-007
+
+Yours faithfully,
+[Contractor Name]
+[Phone] | [Email]
+```
+
+---
+
+### Postal Mail Integration
+
+**Provider:** PostGrid or Lob (both cover Ireland, both have REST APIs)
+
+**Flow:**
+```
+Chase Stage 3, 4, or 5 reached
+→ n8n generates letter PDF (contractor letterhead template)
+→ HTTP Request → PostGrid API with PDF + client address
+→ PostGrid prints, envelopes, stamps, posts next working day
+→ Notion updated: letter posted, date logged
+→ Stage 5 (Final notice): recorded delivery option — PostGrid returns tracking reference
+→ Tracking reference stored in Notion as proof of delivery
+```
+
+**Cost per letter:** ~€1.50–3.00 (PostGrid rate) + Irish postage ~€1.25 = ~€2–4 per letter
+**Recorded delivery surcharge:** ~€1–2 extra for Stage 5
+
+**Address source:** Customer record (already in system from `job_setup`). No extra data required from contractor.
+
+---
+
+### Legal Paper Trail — What Gets Stored
+
+Every chase action is logged in Notion with full detail:
+
+| Record | What's stored |
+|--------|--------------|
+| Each email sent | Date, time, recipient address, message text, stage number |
+| Each letter posted | Date posted, PostGrid confirmation ID, delivery address |
+| Recorded delivery | Tracking reference, proof of delivery date |
+| Payment received | Date, amount, method — auto-logged via Stripe or voice |
+| Chase paused/stopped | Date, reason (if given by contractor) |
+
+**Chase Log field** on the Invoice record builds automatically:
+```
+2026-05-16 08:01 — Reminder 1 sent via email to murphy@example.com
+2026-05-22 08:01 — Reminder 2 sent via email to murphy@example.com
+2026-05-29 08:01 — Reminder 3 sent via email + letter posted (PostGrid ref: PG-00123)
+2026-06-05 08:01 — Reminder 4 sent via email + letter posted (PostGrid ref: PG-00187)
+2026-06-12 08:01 — Final notice sent via email + recorded post (An Post ref: IE123456789)
+2026-06-19 08:01 — Escalation alert sent to contractor — no further automated contact
+```
+
+This log can be printed or exported directly from Notion as an evidence document for court.
+
+---
+
+### New Notion Fields on Invoices
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Chase Enabled | Checkbox | Default true when invoice sent |
+| Chase Stage | Number | 0–5 |
+| Last Chased Date | Date | When last message was sent |
+| Next Chase Date | Date | Calculated from schedule |
+| Chase Log | Text | Full timestamped log of all actions |
+| Chase Paused | Checkbox | Temporary pause |
+| Letters Posted | Number | Count of physical letters sent |
+| Recorded Delivery Ref | Text | An Post / PostGrid tracking reference |
+| Proof of Delivery Date | Date | Confirmed delivery of recorded letter |
+
+---
+
+### Contractor Controls (Voice)
+
+| Voice command | Action |
+|---|---|
+| *"Stop chasing Murphy"* | Chase Enabled → false |
+| *"Pause chasing Murphy"* | Chase Paused → true, auto-resumes in 7 days |
+| *"Chase Murphy now"* | Sends next stage immediately |
+| *"What does Murphy owe?"* | Returns balance + chase stage + last contact date |
+| *"Send Murphy a final notice"* | Jumps to Stage 5 immediately |
+
+---
+
+### Weekly Cash Flow Summary — Monday 8am
+
+Contractor receives a WhatsApp summary every Monday:
+
+> *"Good morning. Outstanding invoices:*
+> *• Mrs Murphy — INV-007 — €2,503 — 21 days overdue (Stage 3 — letter posted)*
+> *• Joe Brennan — INV-009 — €840 — 3 days overdue (Stage 1)*
+> *• Total outstanding: €3,343*
+> *• Paid this month: €6,200*
+> *• Paid this week: €1,450"*
+
+---
+
+### Partial Payment Handling
+
+If client pays part of the invoice:
+- Chase continues for remaining balance only
+- Messages reference remaining amount
+- Chase Log records partial payment with date and amount
+
+### n8n Nodes Required
+
+- Scheduled trigger — daily 8am
+- Notion query — all overdue open invoices
+- Loop — per invoice, check stage and dates
+- Email send (SMTP or SendGrid) — Stages 1, 2, 3, 4, 5
+- HTTP Request → PostGrid API — Stages 3, 4, 5 (letter PDF)
+- Twilio WhatsApp — escalation alert to contractor at Stage 6
+- Notion update — Chase Stage, Last Chased, Next Chase, Chase Log
+- Scheduled trigger — Monday 8am weekly summary
+- New intent handlers: `chase_stop`, `chase_pause`, `chase_now`, `balance_query`, `chase_final`
 
 ---
 
