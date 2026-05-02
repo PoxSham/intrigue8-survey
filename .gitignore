@@ -1,4 +1,5 @@
 .claude/
+!.claude/agents/
 memory/
 CLAUDE.md
 TASKS.md
