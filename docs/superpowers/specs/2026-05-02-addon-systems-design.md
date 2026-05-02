@@ -620,7 +620,285 @@ If client pays part of the invoice:
 
 ---
 
-## Add-On 4: RCT & VAT Tax Summary — PENDING DESIGN
+## Add-On 4: RCT & VAT Tax Summary — LOCKED
+
+### What It Is
+
+A real-time tax intelligence module that automatically tracks every invoice raised, every cost logged, every RCT deduction made, and every payment received — then produces clean, structured summaries on a bi-monthly schedule (aligned to Revenue's VAT return cycle) and a full annual summary for the Form 11. The contractor hands their accountant a professional document instead of a shoebox of receipts.
+
+All data comes from the system the contractor is already using. No extra data entry. No new habits. It runs in the background and surfaces what the accountant needs, when they need it.
+
+---
+
+### Why It Works as an Upsell
+
+**The pain is universal and unavoidable.** Every contractor in the research cited RCT and VAT compliance as a major burden. Unlike some pain points that only affect certain trades or business sizes, Revenue compliance affects 100% of the target market. There is no contractor who does not have this problem.
+
+**The alternative has a price tag.** Irish contractors pay €500–€1,500 per year to an accountant to organise exactly what this module does automatically. A contractor paying €800/year to an accountant for bookkeeping preparation can see immediately that this module costs a fraction of that and delivers the same output in real time rather than once a year in a panic before the October deadline.
+
+**It reduces accountancy fees.** When the contractor hands their accountant a structured, itemised bi-monthly summary rather than a bag of receipts and a rough spreadsheet, the accountant spends significantly less time on data organisation. That time saving shows up on the accountant's invoice. The module effectively pays for itself through reduced accountancy costs — a point that can be demonstrated in a sales conversation.
+
+**Revenue compliance is not optional.** Missing a bi-monthly VAT return triggers a surcharge of 10% of the VAT due, plus interest at 0.0274% per day. Missing multiple returns triggers an audit. The fear of Revenue is acute for sole traders — it is cited in almost every piece of Irish SME research as a top stress factor. This module removes that fear with a concrete system rather than wishful thinking.
+
+**It creates the highest retention of any add-on.** Once a contractor's bi-monthly VAT data, RCT ledger, and cost history live in this system, switching to anything else means losing that history and rebuilding it manually. This is the module that makes the contractor permanently dependent on the platform in the best possible way — their entire financial record is here.
+
+**The accountant becomes a referral channel.** When a contractor's accountant starts receiving clean, professional quarterly summaries from Intrigue8 — labelled with the platform name — the accountant notices. Accountants in the West of Ireland serve dozens of trade contractors. A tool that saves them preparation time and reduces client errors is one they will recommend to other clients. Add-on 4 turns the accountant into a passive sales channel.
+
+**Upsell timing is natural.** A contractor who is already using the core system (Tier 1) and has added invoice delivery and payment chasing (Tier 2) is now organised, getting paid faster, and has a complete job history in Notion. The tax summary (Tier 3) is the obvious next question: *"All this data is already in the system — can it do my VAT return prep too?"* The answer is yes, and the sale is easy.
+
+---
+
+### Overview
+
+The module runs automatically on a bi-monthly schedule and produces:
+1. **Bi-monthly VAT summary** — aligned to Revenue's return cycle
+2. **Annual year-end summary** — full year data for the Form 11 (delivered every January)
+3. **On-demand queries** — contractor can ask any time via voice
+
+All figures are pulled from existing Notion databases. No new data entry required beyond two small additions to the data model.
+
+---
+
+### VAT Filing Periods — Ireland
+
+Revenue's default VAT return cycle is bi-monthly. Summaries trigger automatically:
+
+| Period | Summary generated | VAT due date |
+|--------|------------------|-------------|
+| Jan–Feb | 1st March | 23rd March |
+| Mar–Apr | 1st May | 23rd May |
+| May–Jun | 1st July | 23rd July |
+| Jul–Aug | 1st September | 23rd September |
+| Sep–Oct | 1st November | 23rd November |
+| Nov–Dec | 1st January | 23rd January |
+
+Contractor receives their summary three weeks before the Revenue deadline — enough time to review, query anything, and hand to their accountant.
+
+Quarterly filing (by Revenue arrangement) available as a configuration option in the Client Mapping table: `vat_period: "bimonthly" | "quarterly" | "annual"`.
+
+---
+
+### VAT Treatment — Direct vs. Principal Contractor Work
+
+This is the critical split that most manual systems get wrong.
+
+**Direct client work** (homeowner, business — no RCT):
+- Contractor charges VAT at 13.5% on services
+- VAT collected → declared on VAT return → paid to Revenue
+
+**Principal contractor work** (RCT applies — `Principal Contractor` flag set on Customer):
+- Contractor issues invoice **without VAT** (reverse charge applies)
+- Principal pays VAT directly to Revenue
+- Contractor reclaims VAT on their own costs as normal
+- This income appears in the summary but **does not contribute to VAT collected**
+
+The summary separates these clearly so the accountant sees the correct VAT position immediately.
+
+---
+
+### What It Tracks
+
+**Income — Direct client work:**
+- All invoices raised to non-principal clients
+- VAT collected at 13.5%
+- Payments received (all methods — cash, Stripe, bank transfer, cheque)
+- Outstanding balances
+
+**Income — Principal contractor work (RCT):**
+- All invoices to principal contractors (no VAT charged)
+- Gross invoice value
+- RCT withheld at source (0%, 20%, or 35% — logged via `payment_received` intent)
+- Net received after RCT deduction
+- RCT: reported as "tax paid on your behalf" — offsets income tax liability at year-end via ROS
+
+**Expenditure — Job costs (from Costs database):**
+- Materials: VAT-reclaimable at 13.5% or 23% (inferred from item type, overridable)
+- Labour-only subcontractor payments: no VAT, RCT may apply
+- Other job costs: skip hire, tool hire, certs — VAT rate per item
+
+**Expenditure — General business expenses (new input channel):**
+Items not tied to a specific job. Contractor logs these by voice:
+*"Log business expense — van insurance €840 for the year"*
+*"Log mileage — 340 kilometres this month"*
+
+Categories tracked:
+- Mileage (Revenue rate: €0.43/km for first 1,500km, €0.24/km thereafter)
+- Phone (business portion — contractor states percentage)
+- Insurance (van, public liability, tool, employers)
+- Professional subscriptions (RECI, RGII, CIF, Safe Electric fees)
+- Tools and equipment
+- Training and CPD
+- Accountancy fees
+- Other
+
+These feed into the annual Form 11 summary as deductible business expenses.
+
+---
+
+### RCT Tracking
+
+When payment arrives from a principal contractor client, the system prompts:
+
+> *"Payment received from Lydon Construction — €3,200. Was RCT withheld? If so, how much?"*
+
+Contractor replies: *"Yes, 20% — €640."* System logs:
+- Gross: €3,200
+- RCT withheld: €640 (20%)
+- Net received: €2,560
+- Tax paid on your behalf: €640 → added to RCT running total
+
+The running total is visible on-demand and appears in every summary. At year-end, the contractor knows exactly how much has been paid on their behalf via RCT before they open ROS.
+
+**RCT rate context stored per client:**
+If a contractor's RCT rate is 0% (full compliance), 20% (standard), or 35% (non-compliant), the Client Mapping table stores this so payment receipts from that client automatically flag the expected deduction.
+
+---
+
+### Bi-Monthly VAT Summary PDF
+
+```
+[Contractor Name] — VAT Summary
+Period: 01 Jan – 28 Feb 2026          VAT No: IE [number]
+Generated: 01 Mar 2026                Due date: 23 Mar 2026
+
+─────────────────────────────────────────────────
+INCOME — DIRECT CLIENT WORK (VAT applicable)
+
+  Invoices raised (ex-VAT):            €12,400.00
+  VAT collected @ 13.5%:               € 1,674.00
+  Gross invoiced (inc VAT):            €14,074.00
+  Payments received:                   €11,200.00
+  Outstanding:                         € 2,874.00
+
+─────────────────────────────────────────────────
+INCOME — PRINCIPAL CONTRACTOR WORK (Reverse charge — no VAT)
+
+  Invoices raised (no VAT):            € 6,400.00
+  RCT withheld (20%):                  € 1,280.00
+  Net received:                        € 5,120.00
+  Tax paid on your behalf (RCT):       € 1,280.00
+
+─────────────────────────────────────────────────
+EXPENDITURE — COSTS & MATERIALS
+
+  VAT-reclaimable costs (ex-VAT):      € 3,840.00
+  VAT on purchases @ 13.5%:           €   518.40
+  VAT on purchases @ 23%:             €   115.00
+  Total VAT reclaimable:              €   633.40
+  Non-VAT costs:                      €   620.00
+
+─────────────────────────────────────────────────
+VAT RETURN SUMMARY
+
+  VAT collected (direct work):         € 1,674.00
+  VAT reclaimable on costs:           €  (633.40)
+  ─────────────────────────────────────────────
+  NET VAT PAYABLE TO REVENUE:         € 1,040.60
+  Due: 23rd March 2026 via ROS
+
+─────────────────────────────────────────────────
+RCT POSITION (year to date)
+
+  RCT withheld Jan–Feb 2026:          € 1,280.00
+  Cumulative YTD (Jan–Feb):           € 1,280.00
+  Note: RCT offsets your income tax
+  liability at year-end via Form 11.
+  Consult your accountant.
+
+─────────────────────────────────────────────────
+Prepared automatically by Intrigue8 Voice-to-Invoice.
+All figures derived from job records, invoices, and cost logs.
+Income tax, USC, and PRSI liability are calculated by your
+accountant on your annual Form 11 return. This document does
+not constitute tax advice.
+```
+
+---
+
+### Annual Year-End Summary (January)
+
+Generated every 1st January covering the full previous year. This is the primary document for the accountant preparing the Form 11 (due 31 October / 15 November via ROS).
+
+Covers:
+- Total income — direct and principal contractor work
+- Total VAT paid bi-monthly (reconciliation)
+- Total RCT withheld across the year
+- All job costs — categorised by VAT rate
+- All general business expenses — mileage, insurance, subscriptions, etc.
+- Full invoice list with status (paid / outstanding)
+- Full cost list with supplier and date
+
+Delivered via WhatsApp PDF to contractor on 1st January with message:
+> *"Your 2025 year-end summary is ready. Forward this to your accountant — it covers everything they need for your Form 11. Total income: €[X] / RCT paid on your behalf: €[X] / Outstanding invoices: €[X]."*
+
+---
+
+### On-Demand Voice Queries
+
+| Voice query | Response |
+|---|---|
+| *"What's my VAT this period?"* | VAT collected, VAT on costs, net payable + due date |
+| *"How much RCT has been taken from me?"* | Total RCT YTD + by client |
+| *"What did I earn this month?"* | Total invoiced + total received |
+| *"What's outstanding?"* | All unpaid invoices with ages |
+| *"Send my tax summary"* | Generates and sends current period PDF immediately |
+| *"Log mileage — X kilometres"* | Logs to general business expenses |
+| *"Log business expense — [item] €[amount]"* | Logs to general business expenses |
+
+---
+
+### New Data Fields Required
+
+**Customer record:**
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Principal Contractor | Checkbox | True = RCT applies, no VAT on invoices |
+| RCT Rate | Select | 0% / 20% / 35% — stored for payment prompts |
+
+**Cost record:**
+
+| Field | Type | Notes |
+|-------|------|-------|
+| VAT Rate on Purchase | Select | 0% / 13.5% / 23% / Exempt |
+
+**New database — General Business Expenses:**
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Date | Date | |
+| Category | Select | Mileage / Phone / Insurance / Subscriptions / Tools / Training / Accountancy / Other |
+| Description | Text | Contractor's wording preserved |
+| Amount | Number | € |
+| VAT Rate | Select | 0% / 13.5% / 23% / Exempt |
+| VAT Amount | Formula | |
+| Period | Text | Which bi-monthly period this falls into |
+
+**Client Mapping table:**
+
+| Field | Type | Notes |
+|-------|------|-------|
+| VAT Period | Select | Bimonthly (default) / Quarterly / Annual |
+
+---
+
+### Phase 2 — Contractor as Principal
+
+For builders and general contractors who hire subcontractors: they become principal contractors and must withhold RCT from subcontractor payments and notify Revenue via ROS. Tracking RCT withheld on payments made (not just received) is a Phase 2 addition — flagged but out of MVP scope.
+
+---
+
+### n8n Nodes Required
+
+- Scheduled trigger — bi-monthly (1st of month following each period end)
+- Scheduled trigger — 1st January (annual summary)
+- Notion query — invoices, costs, payments, general expenses for period
+- Calculation node — VAT collected, VAT on costs, net payable, RCT YTD
+- Split by client type — direct vs. principal (VAT treatment differs)
+- PDF generation — bi-monthly VAT summary + annual year-end summary
+- Twilio send — PDF to contractor WhatsApp with summary message
+- New intent handlers: `tax_query`, `vat_query`, `rct_query`, `income_query`, `summary_request`, `expense_log`, `mileage_log`
+- RCT prompt flow — triggered on `payment_received` from principal contractor client
 
 ---
 
