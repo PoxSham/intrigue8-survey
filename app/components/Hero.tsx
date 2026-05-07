@@ -74,83 +74,35 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Floating voice-note mockup */}
-      <div
+      {/* i8 mark — the brand graphic from the original site */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/i8-mark.png"
+        alt=""
         aria-hidden
+        className="hero-mark"
         style={{
           position: "absolute",
-          right: "max(40px, calc(50% - 540px + 580px))",
-          top: "50%",
-          transform: "translateY(-50%)",
-          display: "flex",
-          flexDirection: "column",
-          gap: 10,
+          right: -100,
+          bottom: -40,
+          width: 520,
+          height: 520,
+          objectFit: "contain",
+          zIndex: 0,
           pointerEvents: "none",
+          mixBlendMode: "multiply",
           opacity: 0.92,
+          WebkitMaskImage: "radial-gradient(ellipse 75% 80% at 58% 52%, black 35%, transparent 72%)",
+          maskImage: "radial-gradient(ellipse 75% 80% at 58% 52%, black 35%, transparent 72%)",
         }}
-        className="hero-mockup"
-      >
-        {/* Incoming voice note bubble */}
-        <div
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--border)",
-            borderRadius: "16px 16px 16px 4px",
-            padding: "14px 18px",
-            maxWidth: 280,
-            boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
-          }}
-        >
-          <div style={{ fontSize: 12, color: "var(--text-3)", marginBottom: 8, fontWeight: 500 }}>You · Voice note</div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 32, height: 32, background: "var(--accent-dim)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                <rect x="5" y="1" width="4" height="8" rx="2" fill="var(--accent)" />
-                <path d="M2 7c0 2.76 2.24 5 5 5s5-2.24 5-5" stroke="var(--accent)" strokeWidth="1.4" strokeLinecap="round" />
-                <line x1="7" y1="12" x2="7" y2="13.5" stroke="var(--accent)" strokeWidth="1.4" strokeLinecap="round" />
-              </svg>
-            </div>
-            <div style={{ flex: 1, height: 24, display: "flex", alignItems: "center", gap: 2 }}>
-              {[4,7,5,9,6,8,5,7,4,6,8,5,7,4,6].map((h, i) => (
-                <div key={i} style={{ width: 2, height: h * 2, background: "var(--accent)", borderRadius: 2, opacity: 0.7 }} />
-              ))}
-            </div>
-            <span style={{ fontSize: 11, color: "var(--text-3)" }}>0:22</span>
-          </div>
-          <p style={{ fontSize: 12, color: "var(--text-2)", marginTop: 8, lineHeight: 1.5 }}>
-            "Done Pat's roof on Barrack St. Two roofers, full day, 40 slates replaced, lead flashing…"
-          </p>
-        </div>
-
-        {/* Arrow */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <svg width="20" height="24" viewBox="0 0 20 24" fill="none" aria-hidden>
-            <path d="M10 0v20M4 14l6 8 6-8" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
-          </svg>
-        </div>
-
-        {/* Docket response */}
-        <div
-          style={{
-            background: "var(--accent)",
-            borderRadius: "16px 16px 4px 16px",
-            padding: "14px 18px",
-            maxWidth: 280,
-            boxShadow: "0 4px 24px var(--accent-glow)",
-          }}
-        >
-          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", marginBottom: 8, fontWeight: 500 }}>Docket · 62 seconds later</div>
-          <p style={{ fontSize: 13, color: "white", lineHeight: 1.5 }}>
-            ✅ Job logged — Pat's Roof, Barrack St<br />
-            📄 Invoice #0047 sent to pat@example.com<br />
-            💬 &quot;Hi Pat, invoice sent. €1,650 due in 14 days.&quot;
-          </p>
-        </div>
-      </div>
+      />
 
       <style>{`
         @media (max-width: 768px) {
-          .hero-mockup { display: none !important; }
+          .hero-mark { right: -180px !important; bottom: -60px !important; width: 380px !important; height: 460px !important; }
+        }
+        @media (max-width: 480px) {
+          .hero-mark { opacity: 0.2 !important; right: -160px !important; width: 320px !important; height: 390px !important; }
         }
       `}</style>
     </section>
