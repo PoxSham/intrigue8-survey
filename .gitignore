@@ -9,3 +9,8 @@ Day 1 - 24th April 2026/
 schedule-call.html
 .DS_Store
 node_modules/
+.next/
+out/
+.env.local
+.env.*.local
+*.log
