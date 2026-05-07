@@ -73,12 +73,12 @@ export default function Problem() {
           ))}
         </div>
 
-        {/* Stats bar */}
+        {/* Stats bar — all figures from published Irish research */}
         <div
           style={{
             marginTop: 48,
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
             gap: 1,
             background: "var(--border)",
             borderRadius: 12,
@@ -87,9 +87,21 @@ export default function Problem() {
           }}
         >
           {[
-            { stat: "7+ hrs/week", label: "lost to admin on average" },
-            { stat: "€4,200+", label: "per year in unchased invoices" },
-            { stat: "1 in 3", label: "jobs never properly recorded" },
+            {
+              stat: "9 hrs/week",
+              label: "spent on admin by Irish SMEs",
+              source: "HRLocker, 2025",
+            },
+            {
+              stat: "58%",
+              label: "of Irish businesses hit by late payments",
+              source: "Enterprise Nation, 2024",
+            },
+            {
+              stat: "60+ days",
+              label: "average time to get paid in Ireland",
+              source: "Atradius Payment Report",
+            },
           ].map((item) => (
             <div
               key={item.stat}
@@ -106,7 +118,8 @@ export default function Problem() {
               >
                 {item.stat}
               </div>
-              <div style={{ fontSize: 14, color: "var(--text-2)" }}>{item.label}</div>
+              <div style={{ fontSize: 14, color: "var(--text-2)", marginBottom: 4 }}>{item.label}</div>
+              <div style={{ fontSize: 11, color: "var(--text-3)", fontStyle: "italic" }}>{item.source}</div>
             </div>
           ))}
         </div>

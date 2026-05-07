@@ -170,7 +170,7 @@ export default function FAQ() {
             {REMAINING} free trial spots. Lock in €49.99/month forever.
           </h2>
           <p style={{ fontSize: 17, color: "rgba(255,255,255,0.8)", marginBottom: 32, position: "relative" }}>
-            When we open to everyone else, it&apos;s €149/month. Trial users pay nothing for 30 days.
+            Irish SMEs spend 9 hours a week on admin. Most of that can be automated. Trial users pay nothing for 30 days.
           </p>
           <a
             href="#trial"

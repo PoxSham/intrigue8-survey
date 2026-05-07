@@ -1,7 +1,7 @@
 const phases = [
   {
     phase: "Phase 1",
-    label: "Live now for founding members",
+    label: "Now in trial with first users",
     status: "live",
     items: [
       "WhatsApp voice note → job record in 60 seconds",
@@ -39,7 +39,7 @@ const phases = [
 ];
 
 const statusStyles: Record<string, { bg: string; color: string; label: string }> = {
-  live: { bg: "rgba(13,148,136,0.1)", color: "var(--accent)", label: "● Live" },
+  live: { bg: "rgba(13,148,136,0.1)", color: "var(--accent)", label: "◎ In trial" },
   upcoming: { bg: "rgba(99,102,241,0.08)", color: "#6366f1", label: "◎ Coming soon" },
   planned: { bg: "rgba(100,116,139,0.08)", color: "var(--text-3)", label: "○ Planned" },
 };
