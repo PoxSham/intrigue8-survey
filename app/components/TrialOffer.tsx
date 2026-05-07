@@ -16,34 +16,19 @@ const TRADES = [
 
 export default function TrialOffer() {
   const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitting(true);
-    setError("");
-
     const form = e.currentTarget;
-    const data = new FormData(form);
+    const d = (id: string) => (form.elements.namedItem(id) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)?.value ?? "";
 
-    try {
-      const res = await fetch("https://formspree.io/f/xpwzggjk", {
-        method: "POST",
-        body: data,
-        headers: { Accept: "application/json" },
-      });
+    const subject = encodeURIComponent(`Docket Trial Application — ${d("name")} (${d("trade")})`);
+    const body = encodeURIComponent(
+      `Name: ${d("name")}\nTrade: ${d("trade")}\nWhatsApp: ${d("phone")}\nCounty: ${d("county")}\n\nBiggest admin headache:\n${d("headache") || "Not provided"}`
+    );
 
-      if (res.ok) {
-        setSubmitted(true);
-      } else {
-        setError("Something went wrong. Email adam@intrigue8.ie directly instead.");
-      }
-    } catch {
-      setError("Something went wrong. Email adam@intrigue8.ie directly instead.");
-    } finally {
-      setSubmitting(false);
-    }
+    window.location.href = `mailto:adam@intrigue8.ie?subject=${subject}&body=${body}`;
+    setSubmitted(true);
   }
 
   return (
@@ -210,7 +195,7 @@ export default function TrialOffer() {
 
               {submitted ? (
                 <div style={{ padding: "40px 28px", textAlign: "center" }}>
-                  <div style={{ fontSize: 40, marginBottom: 16 }}>✅</div>
+                  <div style={{ fontSize: 40, marginBottom: 16 }}>📬</div>
                   <h3
                     style={{
                       fontFamily: "var(--font-jakarta), 'Plus Jakarta Sans', sans-serif",
@@ -220,15 +205,14 @@ export default function TrialOffer() {
                       marginBottom: 10,
                     }}
                   >
-                    Application received.
+                    Your email app should have opened.
                   </h3>
                   <p style={{ fontSize: 15, color: "var(--text-2)", lineHeight: 1.65 }}>
-                    Adam will be in touch on WhatsApp within 24 hours. If you don&apos;t
-                    hear back, email{" "}
+                    Hit send and Adam will be in touch on WhatsApp within 24 hours.
+                    Prefer to message directly?{" "}
                     <a href="mailto:adam@intrigue8.ie" style={{ color: "var(--accent)" }}>
                       adam@intrigue8.ie
                     </a>
-                    .
                   </p>
                 </div>
               ) : (
@@ -400,22 +384,15 @@ export default function TrialOffer() {
                     />
                   </div>
 
-                  {error && (
-                    <p style={{ fontSize: 13, color: "#ef4444" }}>{error}</p>
-                  )}
-
                   <button
                     type="submit"
-                    disabled={submitting}
                     className="btn-primary"
-                    style={{ width: "100%", justifyContent: "center", fontSize: 15, padding: "14px 24px", borderRadius: 10, opacity: submitting ? 0.7 : 1, cursor: submitting ? "wait" : "pointer" }}
+                    style={{ width: "100%", justifyContent: "center", fontSize: 15, padding: "14px 24px", borderRadius: 10 }}
                   >
-                    {submitting ? "Sending…" : "Apply for a trial spot"}
-                    {!submitting && (
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    )}
+                    Apply for a trial spot
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </button>
 
                   <p style={{ fontSize: 12, color: "var(--text-3)", textAlign: "center", lineHeight: 1.5 }}>
