@@ -28,8 +28,12 @@ const faqs = [
     a: "Cancel any time, no questions asked. No minimum term, no exit fees. Your data is exportable on request.",
   },
   {
-    q: "I'm a founding member — is my price really locked forever?",
-    a: "Yes. €49/month for as long as you're a customer. When we open publicly at €99/month, your price doesn't change. That's the whole point of the founding offer.",
+    q: "If I trial it and like it — is €49.99/month really locked forever?",
+    a: "Yes. Trial users who choose to continue pay €49.99/month for as long as they're a customer. When we open publicly at €149/month, your price never changes. That's the whole point of getting in early.",
+  },
+  {
+    q: "What happens after the 30-day trial?",
+    a: "Adam will check in with you at the end of the trial. If it's saved you time and you want to keep going, you lock in at €49.99/month. If it hasn't worked for you, you walk away — no charge, no obligation.",
   },
 ];
 
@@ -163,13 +167,13 @@ export default function FAQ() {
               position: "relative",
             }}
           >
-            {REMAINING} spots left. After that, it&apos;s €99/month.
+            {REMAINING} free trial spots. Lock in €49.99/month forever.
           </h2>
           <p style={{ fontSize: 17, color: "rgba(255,255,255,0.8)", marginBottom: 32, position: "relative" }}>
-            Join the founding members who are already saving 7+ hours a week.
+            When we open to everyone else, it&apos;s €149/month. Trial users pay nothing for 30 days.
           </p>
           <a
-            href="#founding"
+            href="#trial"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -186,7 +190,7 @@ export default function FAQ() {
               position: "relative",
             }}
           >
-            Claim your founding spot — €49/month
+            Apply for a free trial spot
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -206,4 +210,4 @@ export default function FAQ() {
   );
 }
 
-const REMAINING = 7;
+const REMAINING = 3;

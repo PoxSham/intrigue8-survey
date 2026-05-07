@@ -61,11 +61,11 @@ export default function Footer() {
               Privacy
             </a>
             <a
-              href="#founding"
+              href="#trial"
               className="btn-primary"
               style={{ fontSize: 12, padding: "8px 16px", borderRadius: 6 }}
             >
-              Claim your spot
+              Apply for trial
             </a>
           </div>
         </div>

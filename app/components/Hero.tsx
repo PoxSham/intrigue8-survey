@@ -18,8 +18,8 @@ export default function Hero() {
           {/* Chip */}
           <div className="chip" style={{ marginBottom: 24 }}>
             <span className="pulse-dot" />
-            20 founding member spots — {" "}
-            <span style={{ fontWeight: 800 }}>7 remaining</span>
+            3 free trial spots — lock in at{" "}
+            <span style={{ fontWeight: 800 }}>€49.99/month forever</span>
           </div>
 
           {/* Headline */}
@@ -56,8 +56,8 @@ export default function Hero() {
 
           {/* CTA row */}
           <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 14 }}>
-            <a href="#founding" className="btn-primary" style={{ fontSize: 16, padding: "15px 32px" }}>
-              Claim your founding spot
+            <a href="#trial" className="btn-primary" style={{ fontSize: 16, padding: "15px 32px" }}>
+              Apply for a free trial spot
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

@@ -57,11 +57,11 @@ export default function Header() {
             Roadmap
           </a>
           <a
-            href="#founding"
+            href="#trial"
             className="btn-primary"
             style={{ padding: "8px 18px", fontSize: 13, borderRadius: 6 }}
           >
-            Founding offer
+            Apply for trial
           </a>
         </nav>
       </div>
